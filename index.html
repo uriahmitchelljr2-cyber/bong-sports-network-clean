@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Bong Sports Network | BSN</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <!-- HEADER -->
+    <header>
+        <div class="logo">
+            <h2>BONG SPORTS NETWORK</h2>
+            <p>Promoting Sports in Bong County, Liberia and Beyound!</p>
+        </div>
+
+        <nav id="navigation">
+            <a href="#home">Home</a>
+            <a href="#news">News</a>
+            <a href="#football">Football</a>
+            <a href="#kickball">Kickball</a>
+            <a href="#results">Results</a>
+            <a href="#gallery">Gallery</a>
+            <a href="#about">About</a>
+        </nav>
+
+        <button class="menu-btn" onclick="toggleMenu()">☰</button>
+    </header>
+
+
+    <!-- HERO SECTION -->
+    <section class="hero" id="home">
+
+        <div class="hero-content">
+
+            <h1>WELCOME TO BONG SPORTS NETWORK</h1>
+
+            <p>
+                Your trusted source for sports news,
+                match results, player profiles and
+                sporting activities across Bong County.
+            </p>
+
+            <a href="#news" class="btn">Explore Latest News</a>
+
+        </div>
+
+    </section>
+
+
+    <!-- LATEST NEWS -->
+    <section class="section" id="news">
+
+        <h2>Latest Sports News</h2>
+
+        <input
+            type="text"
+            id="searchInput"
+            placeholder="Search sports news..."
+            onkeyup="searchNews()"
+        >
+
+        <div class="categories">
+
+            <button onclick="filterNews('All')">All</button>
+
+            <button onclick="filterNews('Football')">Football</button>
+
+            <button onclick="filterNews('Kickball')">Kickball</button>
+
+            <button onclick="filterNews('Basketball')">Basketball</button>
+
+        </div>
+
+        <div class="news-container" id="newsContainer">
+
+            <!-- News will appear here through JavaScript -->
+
+        </div>
+
+    </section>
+
+
+    <!-- FOOTBALL -->
+    <section class="section gray" id="football">
+
+        <h2>Football Coverage</h2>
+
+        <p>
+            Bringing you the latest football activities,
+            club developments, player profiles and
+            competitions across Bong County.
+        </p>
+
+        <img src="images/Godtime celebration.jpg"
+             alt="Bong County football"
+             class="feature-image">
+
+    </section>
+
+
+    <!-- KICKBALL -->
+    <section class="section" id="kickball">
+
+        <h2>Kickball Coverage</h2>
+
+        <p>
+            Follow kickball competitions, team performances,
+            player achievements and match reports.
+        </p>
+
+        <img src="images/kickball.jpg"
+             alt="Bong County kickball"
+             class="feature-image">
+
+    </section>
+
+
+    <!-- OTHER SPORTS -->
+    <section class="section gray">
+
+        <h2>Other Sports</h2>
+
+        <div class="sports-container">
+
+            <div class="sport-card">
+                <img src="images/Basketball.jpg" alt="Basketball">
+                <h3>Basketball</h3>
+            </div>
+
+            <div class="sport-card">
+                <img src="images/volleyball.jpg" alt="Volleyball">
+                <h3>Volleyball</h3>
+            </div>
+
+            <div class="sport-card">
+                <img src="images/Kongoiah.jpg" alt="Athletics">
+                <h3>Athletics</h3>
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- MATCH RESULTS -->
+    <section class="section" id="results">
+
+        <h2>Recent Match Results</h2>
+
+        <div class="results-container" id="resultsContainer">
+
+            <!-- Match results will appear here -->
+
+        </div>
+
+    </section>
+
+
+    <!-- FIXTURES -->
+    <section class="section gray" id="fixtures">
+
+        <h2>Upcoming Fixtures</h2>
+
+        <div class="fixtures-container" id="fixturesContainer">
+
+            <!-- Fixtures will appear here -->
+
+        </div>
+
+    </section>
+
+
+    <!-- PHOTO GALLERY -->
+    <section class="section" id="gallery">
+
+        <h2>Sports Photo Gallery</h2>
+
+        <div class="gallery-grid">
+
+            <img src="images/Coaching Staff.jpg" alt="Football action">
+
+            <img src="images/Dorris.jpg" alt="Kickball action">
+
+            <img src="images/Tokpah Kerkulah.jpg" alt="Basketball action">
+
+            <img src="images/Prokpah.jpg" alt="Sports stadium">
+
+            <img src="images/Headup.jpg" alt="Volleyball action">
+
+            <img src="images/Kickball.jpg" alt="Football action">
+
+              <img src="images/Kick.jpg" alt="Football action">
+
+  <img src="images/Mary.jpg" alt="Football action">
+  <img src="images/slide.jpg" alt="Football action">
+  <img src="images/Sparo.jpg" alt="Football action">
+
+    <img src="images/Senior Paye.jpg" alt="Football action">
+
+  <img src="images/Esther.jpg" alt="Football action">
+  <img src="images/Joshua.jpg" alt="Football action">
+    <img src="images/Godtime Joe.jpg" alt="Football action">
+      <img src="images/Leave me.jpg" alt="Football action">
+  <img src="images/Lineup.jpg" alt="Football action">
+  <img src="images/Lofa.jpg" alt="Football action">
+  <img src="images/Roberto.jpg" alt="Football action">
+    <img src="images/Dweh.jpg" alt="Football action">
+  <img src="images/Benjimen.jpg" alt="Football action">
+  <img src="images/Bench.jpg" alt="Football action">
+    <img src="images/Bong.jpg" alt="Football action">
+  <img src="images/Adam.jpg" alt="Football action">
+    <img src="images/Awee.jpg" alt="Football action">
+ <img src="images/Elijah.jpg" alt="Football action">
+ <img src="images/Basket.jpg" alt="Football action">
+  <img src="images/Gbarfoe.jpg" alt="Football action">
+
+        </div>
+
+    </section>
+
+
+    <!-- ABOUT -->
+    <section class="section gray" id="about">
+
+        <h2>About Bong Sports Network</h2>
+
+        <p>
+            Bong Sports Network (BSN) is a sports media
+            platform dedicated to promoting sports,
+            reporting sporting activities and highlighting
+            talented athletes across Bong County and Liberia.
+
+            Our mission is to give local sports and athletes
+            the recognition they deserve.
+        </p>
+
+    </section>
+
+
+    <!-- CONTACT -->
+    <section class="section" id="contact">
+
+        <h2>Contact Us</h2>
+           <a
+                href="mailto:uriahmitchelljr2@gmail.com subject=Sports%20News%20Submission"
+                class="button">
+                Email the Newsroom
+            </a>
+            
+        <p>Location: Bong County, Liberia</p>
+
+        <p>Facebook: Bong Sports Network</p>
+
+    </section>
+
+
+    <!-- FOOTER -->
+    <footer>
+
+        <h3>BONG SPORTS NETWORK</h3>
+
+        <p>Promoting Sports. Celebrating Talent.</p>
+
+        <p>
+            &copy; <span id="year"></span>
+            Bong Sports Network. All Rights Reserved.
+        </p>
+
+    </footer>
+
+
+    <script src="script.js"></script>
+    <script type="module" src="news-public.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,54 @@
+.public-clubs {
+    max-width: 1100px;
+    margin: 40px auto;
+    padding: 20px;
+}
+
+.public-clubs h1 {
+    text-align: center;
+    color: #176b35;
+    margin-bottom: 10px;
+}
+
+.public-clubs > p {
+    text-align: center;
+    color: #666;
+    margin-bottom: 30px;
+}
+
+#publicClubsContainer {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+    gap: 25px;
+}
+
+.public-club-card {
+    background: white;
+    border-radius: 10px;
+    padding: 20px;
+    text-align: center;
+    box-shadow: 0 3px 12px rgba(0, 0, 0, 0.1);
+}
+
+.public-club-card img {
+    width: 120px;
+    height: 120px;
+    object-fit: contain;
+    margin-bottom: 15px;
+}
+
+.public-club-card h3 {
+    color: #176b35;
+    margin-bottom: 10px;
+}
+
+.public-club-card p {
+    color: #555;
+    margin: 6px 0;
+}
+
+@media (max-width: 600px) {
+    .public-clubs {
+        padding: 15px;
+    }
+}

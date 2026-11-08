@@ -1,0 +1,11 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewpoiont"
+content="width=device-width, initial-scale=1.0">
+
+<meta name="description"
+content="Bong Sports Network brings you the latest sports news, football,
+kickball, match results, fixtures, and sporting events in Bong County and Liberia.">
+<title>Bong Sports Network|Your Home for Sports</title>
