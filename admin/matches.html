@@ -1,0 +1,145 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Fixtures & Results | Bong Sports Network</title>
+
+    <link rel="stylesheet" href="matches.css">
+</head>
+
+<body>
+
+    <header>
+        <h1>Bong Sports Network</h1>
+        <p>Administrator Dashboard</p>
+    </header>
+
+    <div class="dashboard-container">
+
+        <aside class="sidebar">
+
+            <h3>MAIN MENU</h3>
+
+            <a href="dashboard.html">Dashboard</a>
+            <a href="players.html">Player Management</a>
+            <a href="clubs.html">Club Management</a>
+            <a href="matches.html" class="active">Fixtures & Results</a>
+            <a href="news.html">News Management</a>
+            <a href="statistics.html">Player Statistics</a>
+
+        </aside>
+
+        <main class="main-content">
+
+            <h2>Fixtures & Results Management</h2>
+            <p>Schedule matches and manage football results.</p>
+
+            <div class="form-container">
+
+                <h3>Schedule New Match</h3>
+
+                <form id="matchForm">
+
+                    <div class="form-group">
+                        <label for="competition">Competition</label>
+                        <input type="text" id="competition"
+                            placeholder="Enter competition name" required>
+                    </div>
+
+                   <div class="form-group">
+    <label for="homeClub">Home Club</label>
+    <input type="text" id="homeClub"
+        placeholder="Enter home club name" required>
+</div>
+
+                    <div class="form-group">
+    <label for="awayClub">Away Club</label>
+    <input type="text" id="awayClub"
+        placeholder="Enter away club name" required>
+</div>
+
+                    <div class="form-group">
+                        <label for="matchDate">Match Date and Time</label>
+                        <input type="datetime-local" id="matchDate" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="venue">Venue</label>
+                        <input type="text" id="venue"
+                            placeholder="Enter match venue">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="homeScore">Home Score</label>
+                        <input type="number" id="homeScore" min="0"
+                            placeholder="Home score">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="awayScore">Away Score</label>
+                        <input type="number" id="awayScore" min="0"
+                            placeholder="Away score">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="matchStatus">Match Status</label>
+                        <select id="matchStatus" required>
+                            <option value="Upcoming">Upcoming</option>
+                            <option value="Live">Live</option>
+                            <option value="Completed">Completed</option>
+                        </select>
+                    </div>
+
+                    <button type="submit" id="saveMatch">
+                        Schedule Match
+                    </button>
+
+                    <p id="matchMessage"></p>
+
+                </form>
+
+            </div>
+
+            <div class="matches-container">
+
+                <h3>Fixtures & Results</h3>
+
+                <input type="text" id="searchMatch"
+                    placeholder="Search competition">
+
+                <div class="table-wrapper">
+
+                    <table>
+
+                        <thead>
+                            <tr>
+                                <th>Competition</th>
+                                <th>Home Club</th>
+                                <th>Away Club</th>
+                                <th>Date</th>
+                                <th>Score</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+
+                        <tbody id="matchesTable"></tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+        </main>
+
+    </div>
+
+    <script type="module" src="matches.js"></script>
+
+</body>
+</html>

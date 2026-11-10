@@ -1,0 +1,126 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>News Management | Bong Sports Network</title>
+    <link rel="stylesheet" href="news.css">
+</head>
+<body>
+
+    <header>
+        <h1>Bong Sports Network</h1>
+        <p>Administrator Dashboard</p>
+    </header>
+
+    <div class="dashboard-container">
+
+        <aside class="sidebar">
+            <h3>MAIN MENU</h3>
+            <a href="dashboard.html">Dashboard</a>
+            <a href="players.html">Player Management</a>
+            <a href="clubs.html">Club Management</a>
+            <a href="matches.html">Fixtures & Results</a>
+            <a href="news.html" class="active">News Management</a>
+            <a href="statistics.html">Player Statistics</a>
+        </aside>
+
+        <main class="main-content">
+
+            <h2>News Management</h2>
+            <p>Create, publish, edit and manage sports news.</p>
+
+            <div class="form-container">
+                <h3>Write Sports News</h3>
+
+                <form id="newsForm">
+
+                    <div class="form-group">
+                        <label for="title">News Title</label>
+                        <input type="text" id="title"
+                            placeholder="Enter news title" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="category">News Category</label>
+                        <select id="category" required>
+                            <option value="">Select Category</option>
+                            <option value="Football">Football</option>
+                            <option value="Kickball">Kickball</option>
+                            <option value="County Sports">County Sports</option>
+                            <option value="Other Sports">Other Sports</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="summary">News Summary</label>
+                        <textarea id="summary"
+                            placeholder="Write a short summary"></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="content">Full News Content</label>
+                        <textarea id="content"
+                            placeholder="Write the full news story"
+                            required></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="imageUrl">Featured Image URL</label>
+                        <input type="url" id="imageUrl"
+                            placeholder="Enter image URL">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="newsStatus">Publication Status</label>
+                        <select id="newsStatus" required>
+                            <option value="Draft">Draft</option>
+                            <option value="Published">Published</option>
+                        </select>
+                    </div>
+
+                    <button type="submit" id="submitButton">
+                        Save News
+                    </button>
+
+                    <button type="button" id="cancelEdit"
+                        style="display:none;">
+                        Cancel Editing
+                    </button>
+
+                    <p id="newsMessage"></p>
+
+                </form>
+            </div>
+
+            <div class="news-container">
+                <h3>Sports News Records</h3>
+
+                <input type="text" id="searchNews"
+                    placeholder="Search news by title">
+
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Title</th>
+                                <th>Category</th>
+                                <th>Status</th>
+                                <th>Date Created</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+
+                        <tbody id="newsTable"></tbody>
+                    </table>
+                </div>
+            </div>
+
+        </main>
+    </div>
+
+    <script type="module" src="news.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,110 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Club Management | Bong Sports Network</title>
+
+    <link rel="stylesheet" href="clubs.css">
+</head>
+
+<body>
+
+    <header>
+        <h1>Bong Sports Network</h1>
+        <p>Administrator Dashboard</p>
+    </header>
+
+    <div class="dashboard-container">
+
+        <aside class="sidebar">
+
+            <h3>MAIN MENU</h3>
+
+            <a href="dashboard.html">Dashboard</a>
+            <a href="players.html">Player Management</a>
+            <a href="clubs.html" class="active">Club Management</a>
+            <a href="matches.html">Fixtures & Results</a>
+            <a href="news.html">News Management</a>
+            <a href="statistics.html">Player Statistics</a>
+
+        </aside>
+
+        <main class="main-content">
+
+            <h2>Club Management</h2>
+            <p>Register and manage football clubs.</p>
+
+            <div class="form-container">
+
+                <h3>Register New Club</h3>
+
+                <form id="clubForm">
+
+                    <div class="form-group">
+                        <label for="clubName">Club Name</label>
+                        <input type="text" id="clubName"
+                            placeholder="Enter club name" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="county">County</label>
+                        <input type="text" id="county"
+                            placeholder="Enter county" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="location">Location</label>
+                        <input type="text" id="location"
+                            placeholder="Enter club location">
+                    </div>
+
+                    <button type="submit" id="saveClub">
+                        Register Club
+                    </button>
+
+                    <p id="clubMessage"></p>
+
+                </form>
+
+            </div>
+
+            <div class="clubs-container">
+
+                <h3>Registered Clubs</h3>
+
+                <input type="text" id="searchClub"
+                    placeholder="Search club">
+
+                <div class="table-wrapper">
+
+                    <table>
+
+                        <thead>
+                            <tr>
+                                <th>Club Name</th>
+                                <th>County</th>
+                                <th>Location</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+
+                        <tbody id="clubsTable"></tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+        </main>
+
+    </div>
+
+    <script type="module" src="clubs.js"></script>
+
+</body>
+</html>

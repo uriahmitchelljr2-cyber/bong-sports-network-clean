@@ -1,0 +1,81 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Gallery Management | Bong Sports Network</title>
+
+    <link rel="stylesheet" href="gallery-admin.css">
+</head>
+
+<body>
+
+    <header>
+        <h1>Bong Sports Network</h1>
+        <p>Administrator Gallery Management</p>
+    </header>
+
+    <main class="gallery-admin">
+
+        <h2>Manage Sports Gallery</h2>
+
+        <p>Upload and manage sports photographs.</p>
+
+        <section class="upload-section">
+
+            <h3>Upload New Photograph</h3>
+
+            <form id="galleryForm">
+
+                <label for="title">Photograph Title</label>
+                <input type="text" id="title" required>
+
+                <label for="caption">Caption</label>
+                <textarea id="caption"></textarea>
+
+                <label for="category">Category</label>
+                <select id="category" required>
+                    <option value="">Select Category</option>
+                    <option value="Football">Football</option>
+                    <option value="Kickball">Kickball</option>
+                    <option value="County Sports Meet">County Sports Meet</option>
+                    <option value="Other Sports">Other Sports</option>
+                </select>
+
+                <label for="photo">Choose Photograph</label>
+                <input
+                    type="file"
+                    id="photo"
+                    accept="image/jpeg,image/png,image/webp"
+                    required
+                >
+
+                <button type="submit">Upload Photograph</button>
+
+                <p id="galleryMessage"></p>
+
+            </form>
+
+        </section>
+
+        <section class="uploaded-section">
+
+            <h3>Uploaded Photographs</h3>
+
+            <div id="adminGalleryContainer">
+                Loading photographs...
+            </div>
+
+        </section>
+
+        <a href="dashboard.html">Back to Dashboard</a>
+
+    </main>
+
+    <script type="module" src="gallery-admin.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,191 @@
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background: #f3f6f4;
+    color: #26352c;
+}
+
+header {
+    background: #123d2a;
+    color: white;
+    padding: 20px 30px;
+}
+
+header h1 {
+    margin-bottom: 5px;
+}
+
+.dashboard-container {
+    display: flex;
+    min-height: 100vh;
+}
+
+.sidebar {
+    width: 230px;
+    flex-shrink: 0;
+    background: #173d2b;
+    padding: 25px 15px;
+}
+
+.sidebar h3 {
+    color: white;
+    margin-bottom: 25px;
+}
+
+.sidebar a {
+    display: block;
+    color: white;
+    text-decoration: none;
+    padding: 13px;
+    margin-bottom: 8px;
+    border-radius: 5px;
+}
+
+.sidebar a:hover,
+.sidebar a.active {
+    background: #2b7950;
+}
+
+.main-content {
+    flex: 1;
+    min-width: 0;
+    padding: 30px;
+}
+
+.main-content h2 {
+    color: #173d2b;
+    margin-bottom: 10px;
+}
+
+.main-content > p {
+    margin-bottom: 25px;
+}
+
+.form-container,
+.statistics-container {
+    background: white;
+    padding: 25px;
+    margin-bottom: 25px;
+    border-radius: 8px;
+}
+
+.form-container h3,
+.statistics-container h3 {
+    color: #173d2b;
+    margin-bottom: 20px;
+}
+
+.form-group {
+    margin-bottom: 18px;
+}
+
+.form-group label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 7px;
+}
+
+.form-group input,
+.form-group select {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+#submitButton,
+#cancelEdit {
+    padding: 12px 20px;
+    border: none;
+    border-radius: 5px;
+    color: white;
+    cursor: pointer;
+    font-weight: bold;
+    margin-right: 5px;
+}
+
+#submitButton {
+    background: #237448;
+}
+
+#submitButton:hover {
+    background: #174d30;
+}
+
+#cancelEdit {
+    background: #6c757d;
+}
+
+#statisticsMessage {
+    margin-top: 12px;
+}
+
+#searchStatistics {
+    width: 100%;
+    max-width: 350px;
+    padding: 12px;
+    margin-bottom: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.table-wrapper {
+    width: 100%;
+    overflow-x: auto;
+}
+
+table {
+    width: 100%;
+    min-width: 850px;
+    border-collapse: collapse;
+}
+
+th,
+td {
+    padding: 13px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+th {
+    background: #173d2b;
+    color: white;
+}
+
+.action-button {
+    padding: 8px 14px;
+    border: none;
+    border-radius: 5px;
+    color: white;
+    cursor: pointer;
+    margin: 3px;
+    font-weight: bold;
+}
+
+.edit-button {
+    background: #237448;
+}
+
+.delete-button {
+    background: #dc3545;
+}
+
+@media (max-width: 700px) {
+    .dashboard-container {
+        flex-direction: column;
+    }
+
+    .sidebar {
+        width: 100%;
+    }
+
+    .main-content {
+        padding: 15px;
+    }
+}

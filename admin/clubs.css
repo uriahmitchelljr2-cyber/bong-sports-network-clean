@@ -1,0 +1,182 @@
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background: #f3f6f4;
+    color: #26352c;
+}
+
+header {
+    background: #123d2a;
+    color: white;
+    padding: 20px 30px;
+}
+
+.dashboard-container {
+    display: flex;
+    min-height: 100vh;
+}
+
+.sidebar {
+    width: 230px;
+    flex-shrink: 0;
+    background: #173d2b;
+    padding: 25px 15px;
+}
+
+.sidebar h3 {
+    color: white;
+    margin-bottom: 25px;
+}
+
+.sidebar a {
+    display: block;
+    color: white;
+    text-decoration: none;
+    padding: 13px;
+    margin-bottom: 8px;
+    border-radius: 5px;
+}
+
+.sidebar a:hover,
+.sidebar a.active {
+    background: #2b7950;
+}
+
+.main-content {
+    flex: 1;
+    min-width: 0;
+    padding: 30px;
+}
+
+.main-content h2 {
+    color: #173d2b;
+    margin-bottom: 10px;
+}
+
+.main-content > p {
+    margin-bottom: 25px;
+}
+
+.form-container,
+.clubs-container {
+    background: white;
+    padding: 25px;
+    margin-bottom: 25px;
+    border-radius: 8px;
+}
+
+.form-container h3,
+.clubs-container h3 {
+    color: #173d2b;
+    margin-bottom: 20px;
+}
+
+.form-group {
+    margin-bottom: 18px;
+}
+
+.form-group label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 7px;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+#saveClub {
+    padding: 12px 20px;
+    border: none;
+    border-radius: 5px;
+    background: #237448;
+    color: white;
+    cursor: pointer;
+}
+
+#clubMessage {
+    margin-top: 12px;
+    color: #237448;
+}
+
+#searchClub {
+    width: 100%;
+    max-width: 350px;
+    padding: 12px;
+    margin-bottom: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.table-wrapper {
+    width: 100%;
+    overflow-x: auto;
+}
+
+table {
+    width: 100%;
+    min-width: 550px;
+    border-collapse: collapse;
+}
+
+th,
+td {
+    padding: 13px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+th {
+    background: #173d2b;
+    color: white;
+}
+
+@media (max-width: 700px) {
+    .dashboard-container {
+        flex-direction: column;
+    }
+
+    .sidebar {
+        width: 100%;
+    }
+
+    .main-content {
+        padding: 15px;
+    }
+}
+/* EDIT AND DELETE BUTTONS */
+
+.action-button {
+    padding: 8px 14px;
+    border: none;
+    border-radius: 5px;
+    color: white;
+    cursor: pointer;
+    margin: 3px;
+    font-weight: bold;
+}
+
+.edit-button {
+    background-color: #237448;
+}
+
+.edit-button:hover {
+    background-color: #174d30;
+}
+
+.delete-button {
+    background-color: #dc3545;
+}
+
+.delete-button:hover {
+    background-color: #a71d2a;
+}
