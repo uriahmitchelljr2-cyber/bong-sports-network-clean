@@ -4,6 +4,7 @@ import { supabase } from './supabase.js';
 // STORE PUBLISHED NEWS
 let news = [];
 
+
 // DISPLAY NEWS
 function displayNews(newsList) {
     const container = document.getElementById("newsContainer");
@@ -23,6 +24,16 @@ function displayNews(newsList) {
             const image = document.createElement("img");
             image.src = item.featured_image_url;
             image.alt = item.title;
+            image.style.cursor = "pointer";
+
+            image.addEventListener("click", function () {
+                const modal = document.getElementById("newsPhotoModal");
+                const preview = document.getElementById("newsPhotoLarge");
+
+                preview.src = item.featured_image_url;
+                modal.style.display = "flex";
+            });
+
             card.appendChild(image);
         }
 
