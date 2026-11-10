@@ -37,31 +37,39 @@ const news = [
 
 function displayNews(newsList) {
 
-    const container = document.getElementById("newsContainer");
+   
+const container = document.getElementById("newsContainer");
 
-    container.innerHTML = "";
+container.innerHTML = "";
 
-    newsList.forEach(item => {
+newsList.forEach(item => {
 
-        container.innerHTML += `
+    container.innerHTML += `
 
-            <div class="news-card">
+        <div class="news-card">
 
-                <img src="${item.image}" alt="${item.title}">
+            <img 
+                src="${item.image}" 
+                alt="${item.title}"
+                class="news-preview-image"
+                onclick="openNewsPhoto('${item.image}')"
+                style="cursor:pointer;"
+            >
 
-                <h3>${item.title}</h3>
+            <h3>${item.title}</h3>
 
-                <p class="category">${item.category}</p>
+            <p class="category">${item.category}</p>
 
-                <p>${item.description}</p>
+            <p>${item.description}</p>
 
-            </div>
+        </div>
 
-        `;
+    `;
 
-    });
+});
 
 }
+
 
 
 // FILTER NEWS
@@ -224,3 +232,18 @@ displayNews(news);
 displayResults();
 
 displayFixtures();
+
+
+function openNewsPhoto(photoUrl) {
+    const modal = document.getElementById("newsPhotoModal");
+    const largePhoto = document.getElementById("newsPhotoLarge");
+
+    largePhoto.src = photoUrl;
+    modal.style.display = "flex";
+}
+
+function closeNewsPhoto() {
+    const modal = document.getElementById("newsPhotoModal");
+    modal.style.display = "none";
+}
+
