@@ -666,3 +666,39 @@ footer p {
     background: #004d26;
     color: white;
 }
+/* PHOTO PREVIEW */
+.photo-modal {
+    display: none;
+    position: fixed;
+    z-index: 9999;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.95);
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    padding: 20px;
+}
+
+.photo-modal img {
+    max-width: 90%;
+    max-height: 75vh;
+    object-fit: contain;
+}
+
+.close-photo {
+    position: absolute;
+    top: 20px;
+    right: 30px;
+    color: white;
+    font-size: 40px;
+    cursor: pointer;
+}
+
+#downloadPhoto {
+    margin-top: 20px;
+    padding: 12px 22px;
+    background: #008000;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+}

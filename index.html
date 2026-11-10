@@ -277,6 +277,31 @@
 
     <script src="script.js"></script>
     <script type="module" src="news-public.js"></script>
+<!-- PHOTO PREVIEW -->
+<div id="photoModal" class="photo-modal">
+    <span class="close-photo">&times;</span>
 
+    <img id="previewImage" src="" alt="Photo preview">
+
+    <a id="downloadPhoto" href="" download>
+        Download Photo
+    </a>
+</div>
+
+<script>
+document.querySelectorAll("img").forEach(function(photo) {
+    photo.style.cursor = "pointer";
+
+    photo.addEventListener("click", function() {
+        document.getElementById("photoModal").style.display = "flex";
+        document.getElementById("previewImage").src = this.src;
+        document.getElementById("downloadPhoto").href = this.src;
+    });
+});
+
+document.querySelector(".close-photo").onclick = function() {
+    document.getElementById("photoModal").style.display = "none";
+};
+</script>
 </body>
 </html>
