@@ -32,6 +32,7 @@ function displayNews(newsList) {
 
                 preview.src = item.featured_image_url;
                 modal.style.display = "flex";
+console.log("News photo preview opened");
             });
 
             card.appendChild(image);

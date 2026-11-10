@@ -19,7 +19,7 @@ const news = [
     {
         title: "Basketball Development in Bong County",
         category: "Basketball",
-        image: "images/Basketball Image.jpg",
+        image: "images/Basketball.jpg",
         description: "Basketball activities continue to attract young athletes."
     },
 
@@ -227,7 +227,7 @@ document.getElementById("year").textContent =
 
 // LOAD WEBSITE CONTENT
 
-displayNews(news);
+displayNews(news);s
 
 displayResults();
 
