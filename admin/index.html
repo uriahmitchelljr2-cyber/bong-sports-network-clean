@@ -1,96 +1,81 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Administrator Login | Bong Sports Network</title>
 
-    <title>Bong Sports Network | Home</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f1f3f5;
+            margin: 0;
+            padding: 20px;
+        }
 
-    <link rel="stylesheet" href="style.css">
+        .login-container {
+            width: 90%;
+            max-width: 350px;
+            box-sizing: border-box;
+            margin: 80px auto;
+            padding: 25px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px #ccc;
+        }
+
+        h2 {
+            text-align: center;
+            color: #173d2a;
+        }
+
+        label {
+            display: block;
+            margin-top: 15px;
+        }
+
+        input {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            box-sizing: border-box;
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            margin-top: 20px;
+            background: #173d2a;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        #message {
+            text-align: center;
+            margin-top: 15px;
+        }
+    </style>
 </head>
 
 <body>
+    <div class="login-container">
+        <h2>Bong Sports Network</h2>
+        <h3>Administrator Login</h3>
 
-    <!-- WEBSITE HEADER -->
-    <header>
-        <div class="logo">
-            <h2>BONG SPORTS NETWORK</h2>
-            <p>The Home of Bong County Sports</p>
-        </div>
+        <form id="loginForm">
+            <label>Email Address</label>
+            <input type="email" id="email" required>
 
-        <nav>
-    <a href="index.html">Home</a>
-    <a href="#news">News</a>
-    <a href="club-profiles.html">Clubs</a>
-    <a href="#fixtures">Fixtures & Results</a>
-    <a href="#players">Players</a>
-    <a href="gallery.html">Gallery</a>
-</nav>
-    </header>
+            <label>Password</label>
+            <input type="password" id="password" required>
 
-    <!-- MAIN CONTENT -->
-    <main>
+            <button type="submit">Login</button>
+        </form>
 
-        <!-- WELCOME SECTION -->
-        <section class="welcome">
-            <h1>Welcome to Bong Sports Network</h1>
-            <p>
-                Your trusted source for sports news, football,
-                kickball, fixtures, results and sporting talents
-                across Bong County.
-            </p>
-        </section>
-
-        <!-- NEWS SECTION -->
-        <section id="news">
-            <h2>Latest Sports News</h2>
-            <div id="newsContainer">
-                <p>News will appear here.</p>
-            </div>
-        </section>
-
-        <!-- CLUBS SECTION -->
-        <section id="clubs">
-            <h2>Featured Clubs</h2>
-            <div id="clubsContainer">
-                <p>Clubs will appear here.</p>
-            </div>
-        </section>
-
-        <!-- FIXTURES SECTION -->
-        <section id="fixtures">
-            <h2>Fixtures & Results</h2>
-            <div id="matchesContainer">
-                <p>Fixtures and results will appear here.</p>
-            </div>
-        </section>
-
-        <!-- PLAYERS SECTION -->
-        <section id="players">
-            <h2>Featured Players</h2>
-            <div id="playersContainer">
-                <p>Player profiles will appear here.</p>
-            </div>
-        </section>
-
-<!-- PLAYER STATISTICS SECTION -->
-<section id="statistics">
-
-    <h2>Player Statistics</h2>
-
-    <div id="statisticsContainer">
-        <p>Player statistics will appear here.</p>
+        <p id="message"></p>
     </div>
 
-</section>
-
-    </main>
-
-    <!-- FOOTER -->
-    <footer>
-        <p>&copy; 2026 Bong Sports Network. All Rights Reserved.</p>
-    </footer>
-<script type="module" src="admin/home.js"></script>
+    <script type="module" src="admin.js"></script>
 </body>
 </html>
