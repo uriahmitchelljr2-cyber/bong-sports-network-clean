@@ -227,7 +227,7 @@ document.getElementById("year").textContent =
 
 // LOAD WEBSITE CONTENT
 
-displayNews(news);s
+displayNews(news);
 
 displayResults();
 
