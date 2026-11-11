@@ -748,3 +748,50 @@ footer p {
     color: #006400;
     margin: 0;
 }
+
+/* INDIVIDUAL PLAYER PROFILE */
+
+.full-player-profile {
+    max-width: 850px;
+    margin: 25px auto;
+    padding: 25px;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 3px 12px rgba(0, 0, 0, 0.12);
+}
+
+.profile-photo {
+    display: block;
+    width: 100%;
+    max-width: 350px;
+    height: 350px;
+    object-fit: cover;
+    border-radius: 12px;
+    margin: 0 auto 25px;
+}
+
+.full-player-profile h2 {
+    color: #006400;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.full-player-profile h3 {
+    color: #006400;
+    margin-top: 25px;
+}
+
+.full-player-profile p {
+    line-height: 1.8;
+    margin: 10px 0;
+}
+
+@media (max-width: 600px) {
+    .full-player-profile {
+        padding: 15px;
+    }
+
+    .profile-photo {
+        height: 280px;
+    }
+}

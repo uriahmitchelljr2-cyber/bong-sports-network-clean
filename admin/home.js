@@ -211,6 +211,7 @@ async function loadMatches() {
 // START LOADING MATCHES
 loadMatches();
 
+
 // LOAD FOOTBALLER PROFILES
 async function loadPlayers() {
 
@@ -262,10 +263,19 @@ async function loadPlayers() {
             playerCard.prepend(photo);
         }
 
+        // MAKE PLAYER CARD CLICKABLE
+        playerCard.style.cursor = 'pointer';
+
+        playerCard.addEventListener('click', function() {
+            window.location.href =
+                'player-profile.html?id=' + encodeURIComponent(player.id);
+        });
+
         playersContainer.appendChild(playerCard);
 
     });
 }
+
 
 // START LOADING PLAYERS
 loadPlayers();
