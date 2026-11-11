@@ -12,7 +12,7 @@ const news = [
     {
         title: "Bong County Kickball Activities",
         category: "Kickball",
-        image: "images/kickball.jpg",
+        image: "images/Kickball.jpg",
         description: "Local kickball teams continue to showcase their talents."
     },
 
