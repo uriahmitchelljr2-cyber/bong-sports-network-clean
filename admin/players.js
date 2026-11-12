@@ -16,7 +16,42 @@ const preferredFoot = document.getElementById('preferredFoot');
 const clubSelect = document.getElementById('club');
 const jerseyNumber = document.getElementById('jerseyNumber');
 const biography = document.getElementById('biography');
+const playerPhoto = document.getElementById('playerPhoto');
+const photoPreview = document.getElementById('photoPreview');
 
+let selectedPhoto = null;
+// ===================================
+// UPLOAD PLAYER PHOTO TO SUPABASE
+// ===================================
+
+async function uploadPlayerPhoto() {
+
+    if (!selectedPhoto) {
+        return null;
+    }
+
+    const fileExtension = selectedPhoto.name.split('.').pop();
+
+    const fileName = Date.now() + '-' +
+        Math.random().toString(36).substring(2) +
+        '.' + fileExtension;
+
+    const filePath = fileName;
+
+    const { error: uploadError } = await supabase.storage
+        .from('player-gallery')
+        .upload(filePath, selectedPhoto);
+
+    if (uploadError) {
+        throw uploadError;
+    }
+
+    const { data } = supabase.storage
+        .from('player-gallery')
+        .getPublicUrl(filePath);
+
+    return data.publicUrl;
+}
 const formMessage = document.getElementById('formMessage');
 const submitButton = document.getElementById('submitButton');
 const cancelEditButton = document.getElementById('cancelEdit');
@@ -24,6 +59,35 @@ const cancelEditButton = document.getElementById('cancelEdit');
 // Stores the ID of the player being edited
 let editingPlayerId = null;
 
+// ===================================
+// PLAYER PHOTO PREVIEW
+// ===================================
+
+playerPhoto.addEventListener('change', function() {
+
+    const file = playerPhoto.files[0];
+
+    if (!file) {
+        selectedPhoto = null;
+        photoPreview.style.display = 'none';
+        photoPreview.src = '';
+        return;
+    }
+
+    if (!file.type.startsWith('image/')) {
+        alert('Please select an image file.');
+        playerPhoto.value = '';
+        selectedPhoto = null;
+        photoPreview.style.display = 'none';
+        return;
+    }
+
+    selectedPhoto = file;
+
+    photoPreview.src = URL.createObjectURL(file);
+    photoPreview.style.display = 'block';
+
+});
 
 // ===================================
 // 2. CHECK ADMINISTRATOR ACCESS
@@ -92,7 +156,9 @@ async function loadClubs() {
 function resetPlayerForm() {
 
     playerForm.reset();
-
+selectedPhoto = null;
+photoPreview.src = '';
+photoPreview.style.display = 'none';
     editingPlayerId = null;
 
     submitButton.textContent = 'Register Player';
@@ -167,7 +233,13 @@ playerForm.addEventListener('submit', async function(event) {
 
         return;
     }
+    try {
 
+        if (selectedPhoto) {
+            const photoUrl = await uploadPlayerPhoto();
+            playerData.photo_url = photoUrl;
+        }
+        
     formMessage.textContent = editingPlayerId !== null
         ? 'Player updated successfully!'
         : 'Player registered successfully!';
@@ -175,7 +247,10 @@ playerForm.addEventListener('submit', async function(event) {
     resetPlayerForm();
 
     await loadPlayers(searchPlayer.value);
-
+    } catch (error) {
+        formMessage.textContent = 'Photo upload failed: ' + error.message;
+        console.error(error);
+    }
 });
 
 
