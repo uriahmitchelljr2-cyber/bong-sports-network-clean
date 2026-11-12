@@ -16,12 +16,20 @@ const preferredFoot = document.getElementById('preferredFoot');
 const clubSelect = document.getElementById('club');
 const jerseyNumber = document.getElementById('jerseyNumber');
 const biography = document.getElementById('biography');
+
 const playerPhoto = document.getElementById('playerPhoto');
 const photoPreview = document.getElementById('photoPreview');
 
+const formMessage = document.getElementById('formMessage');
+const submitButton = document.getElementById('submitButton');
+const cancelEditButton = document.getElementById('cancelEdit');
+
 let selectedPhoto = null;
+let editingPlayerId = null;
+
+
 // ===================================
-// UPLOAD PLAYER PHOTO TO SUPABASE
+// 2. UPLOAD PLAYER PHOTO
 // ===================================
 
 async function uploadPlayerPhoto() {
@@ -36,31 +44,24 @@ async function uploadPlayerPhoto() {
         Math.random().toString(36).substring(2) +
         '.' + fileExtension;
 
-    const filePath = fileName;
-
     const { error: uploadError } = await supabase.storage
-        .from('player-gallery')
-        .upload(filePath, selectedPhoto);
+        .from('sports-gallery')
+        .upload(fileName, selectedPhoto);
 
     if (uploadError) {
         throw uploadError;
     }
 
     const { data } = supabase.storage
-        .from('player-gallery')
-        .getPublicUrl(filePath);
+        .from('sports-gallery')
+        .getPublicUrl(fileName);
 
     return data.publicUrl;
 }
-const formMessage = document.getElementById('formMessage');
-const submitButton = document.getElementById('submitButton');
-const cancelEditButton = document.getElementById('cancelEdit');
 
-// Stores the ID of the player being edited
-let editingPlayerId = null;
 
 // ===================================
-// PLAYER PHOTO PREVIEW
+// 3. PLAYER PHOTO PREVIEW
 // ===================================
 
 playerPhoto.addEventListener('change', function() {
@@ -69,16 +70,20 @@ playerPhoto.addEventListener('change', function() {
 
     if (!file) {
         selectedPhoto = null;
-        photoPreview.style.display = 'none';
         photoPreview.src = '';
+        photoPreview.style.display = 'none';
         return;
     }
 
     if (!file.type.startsWith('image/')) {
+
         alert('Please select an image file.');
+
         playerPhoto.value = '';
         selectedPhoto = null;
+        photoPreview.src = '';
         photoPreview.style.display = 'none';
+
         return;
     }
 
@@ -89,8 +94,9 @@ playerPhoto.addEventListener('change', function() {
 
 });
 
+
 // ===================================
-// 2. CHECK ADMINISTRATOR ACCESS
+// 4. CHECK ADMIN ACCESS
 // ===================================
 
 async function checkAdmin() {
@@ -109,8 +115,11 @@ async function checkAdmin() {
         .single();
 
     if (profileError || !profile || profile.role !== 'admin') {
+
         await supabase.auth.signOut();
+
         window.location.href = 'admin.html';
+
         return false;
     }
 
@@ -119,7 +128,7 @@ async function checkAdmin() {
 
 
 // ===================================
-// 3. LOAD CLUBS INTO DROPDOWN
+// 5. LOAD CLUBS
 // ===================================
 
 async function loadClubs() {
@@ -130,7 +139,9 @@ async function loadClubs() {
         .order('club_name');
 
     if (error) {
+
         console.error('Error loading clubs:', error.message);
+
         return;
     }
 
@@ -146,32 +157,34 @@ async function loadClubs() {
         clubSelect.appendChild(option);
 
     });
+
 }
 
 
 // ===================================
-// 4. RESET PLAYER FORM
+// 6. RESET PLAYER FORM
 // ===================================
 
 function resetPlayerForm() {
 
     playerForm.reset();
-selectedPhoto = null;
-photoPreview.src = '';
-photoPreview.style.display = 'none';
+
+    selectedPhoto = null;
+
+    photoPreview.src = '';
+    photoPreview.style.display = 'none';
+
     editingPlayerId = null;
 
     submitButton.textContent = 'Register Player';
 
     cancelEditButton.style.display = 'none';
 
-    formMessage.textContent = '';
-
 }
 
 
 // ===================================
-// 5. REGISTER OR UPDATE PLAYER
+// 7. REGISTER OR UPDATE PLAYER
 // ===================================
 
 playerForm.addEventListener('submit', async function(event) {
@@ -206,61 +219,95 @@ playerForm.addEventListener('submit', async function(event) {
 
     };
 
+    const isEditing = editingPlayerId !== null;
+
+    submitButton.disabled = true;
+    submitButton.textContent = 'Saving...';
+
     formMessage.textContent = 'Saving player...';
 
-    let result;
-
-    if (editingPlayerId !== null) {
-
-        result = await supabase
-            .from('players')
-            .update(playerData)
-            .eq('id', editingPlayerId);
-
-    } else {
-
-        result = await supabase
-            .from('players')
-            .insert([playerData]);
-
-    }
-
-    if (result.error) {
-
-        formMessage.textContent = 'Error: ' + result.error.message;
-
-        console.error(result.error);
-
-        return;
-    }
     try {
 
+        // Upload the new photo first, if one was selected.
+
         if (selectedPhoto) {
+
             const photoUrl = await uploadPlayerPhoto();
+
             playerData.photo_url = photoUrl;
+
         }
-        
-    formMessage.textContent = editingPlayerId !== null
-        ? 'Player updated successfully!'
-        : 'Player registered successfully!';
 
-    resetPlayerForm();
+        let result;
 
-    await loadPlayers(searchPlayer.value);
-    } catch (error) {
-        formMessage.textContent = 'Photo upload failed: ' + error.message;
-        console.error(error);
+        // UPDATE EXISTING PLAYER
+
+        if (isEditing) {
+
+            result = await supabase
+                .from('players')
+                .update(playerData)
+                .eq('id', editingPlayerId);
+
+        }
+
+        // REGISTER NEW PLAYER
+
+        else {
+
+            result = await supabase
+                .from('players')
+                .insert([playerData]);
+
+        }
+
+        if (result.error) {
+            throw result.error;
+        }
+
+        // RESET FORM
+
+        resetPlayerForm();
+
+        // RELOAD PLAYER LIST
+
+        await loadPlayers(searchPlayer.value);
+
+        formMessage.textContent = isEditing
+            ? 'Player updated successfully!'
+            : 'Player registered successfully!';
+
     }
+
+    catch (error) {
+
+        formMessage.textContent = 'Error: ' + error.message;
+
+        console.error('Player save error:', error);
+
+    }
+
+    finally {
+
+        submitButton.disabled = false;
+
+        submitButton.textContent = editingPlayerId !== null
+            ? 'Save Changes'
+            : 'Register Player';
+
+    }
+
 });
 
 
 // ===================================
-// 6. LOAD PLAYERS FROM DATABASE
+// 8. LOAD PLAYERS FROM DATABASE
 // ===================================
 
 async function loadPlayers(search = '') {
 
-    playersTable.innerHTML = '<tr><td colspan="5">Loading players...</td></tr>';
+    playersTable.innerHTML =
+        '<tr><td colspan="5">Loading players...</td></tr>';
 
     let query = supabase
         .from('players')
@@ -273,13 +320,17 @@ async function loadPlayers(search = '') {
             club,
             club_id,
             jersey_number,
-            biography
+            biography,
+            photo_url
         `)
         .order('full_name');
 
     if (search.trim() !== '') {
 
-        query = query.ilike('full_name', '%' + search.trim() + '%');
+        query = query.ilike(
+            'full_name',
+            '%' + search.trim() + '%'
+        );
 
     }
 
@@ -290,7 +341,7 @@ async function loadPlayers(search = '') {
         playersTable.innerHTML =
             '<tr><td colspan="5">Error loading players.</td></tr>';
 
-        console.error(error.message);
+        console.error('Error loading players:', error.message);
 
         return;
     }
@@ -321,6 +372,7 @@ async function loadPlayers(search = '') {
         clubCell.textContent = player.club || '';
 
         // EDIT BUTTON
+
         const editButton = document.createElement('button');
 
         editButton.textContent = 'Edit';
@@ -333,6 +385,7 @@ async function loadPlayers(search = '') {
         });
 
         // DELETE BUTTON
+
         const deleteButton = document.createElement('button');
 
         deleteButton.textContent = 'Delete';
@@ -341,7 +394,8 @@ async function loadPlayers(search = '') {
         deleteButton.addEventListener('click', async function() {
 
             const confirmed = confirm(
-                'Are you sure you want to delete ' + player.full_name + '?'
+                'Are you sure you want to delete ' +
+                player.full_name + '?'
             );
 
             if (!confirmed) {
@@ -384,7 +438,7 @@ async function loadPlayers(search = '') {
 
 
 // ===================================
-// 7. EDIT PLAYER
+// 9. EDIT PLAYER
 // ===================================
 
 function editPlayer(player) {
@@ -407,6 +461,22 @@ function editPlayer(player) {
 
     biography.value = player.biography || '';
 
+    // Show the existing photo, if available.
+
+    if (player.photo_url) {
+
+        photoPreview.src = player.photo_url;
+        photoPreview.style.display = 'block';
+
+    } else {
+
+        photoPreview.src = '';
+        photoPreview.style.display = 'none';
+
+    }
+
+    selectedPhoto = null;
+
     submitButton.textContent = 'Save Changes';
 
     cancelEditButton.style.display = 'inline-block';
@@ -421,7 +491,7 @@ function editPlayer(player) {
 
 
 // ===================================
-// 8. CANCEL EDITING
+// 10. CANCEL EDITING
 // ===================================
 
 cancelEditButton.addEventListener('click', function() {
@@ -432,7 +502,7 @@ cancelEditButton.addEventListener('click', function() {
 
 
 // ===================================
-// 9. SEARCH PLAYERS
+// 11. SEARCH PLAYERS
 // ===================================
 
 searchPlayer.addEventListener('input', function() {
@@ -443,7 +513,7 @@ searchPlayer.addEventListener('input', function() {
 
 
 // ===================================
-// 10. START THE PLAYER MANAGEMENT PAGE
+// 12. START PLAYER MANAGEMENT
 // ===================================
 
 async function startPlayerManagement() {
