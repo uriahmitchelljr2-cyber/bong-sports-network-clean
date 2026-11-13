@@ -51,7 +51,9 @@ async function loadPlayerProfile() {
 
             <h3>Player Biography</h3>
 
-            <p>${data.biography || 'Player biography has not been added yet.'}</p>
+<p style="white-space: pre-line; text-align: left; line-height: 1.8;">
+    ${data.biography || 'Player biography has not been added yet.'}
+</p>
 
         </div>
     `;
