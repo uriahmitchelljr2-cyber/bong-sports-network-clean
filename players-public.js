@@ -38,7 +38,14 @@ async function loadPlayers() {
             <p>${player.biography || ''}</p>
         `;
 
-        playersContainer.appendChild(card);
+        card.style.cursor = 'pointer';
+
+card.addEventListener('click', () => {
+    window.location.href =
+        'player-profile.html?id=' + encodeURIComponent(player.id);
+});
+
+playersContainer.appendChild(card);
     });
 }
 
