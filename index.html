@@ -176,6 +176,19 @@
 
     </section>
 
+<!-- LIVE SCORES -->
+<section class="section" id="live-scores">
+
+    <h2>Live Scores</h2>
+
+    <div class="results-container" id="liveScoresContainer">
+
+        <p>Loading live scores...</p>
+
+    </div>
+
+</section>
+
 
     <!-- FIXTURES -->
     <section class="section gray" id="fixtures">
@@ -340,10 +353,14 @@ document.querySelector(".close-photo").onclick = function() {
 };
 </script>
 
+
 <div id="newsPhotoModal" class="photo-modal">
     <span class="close-photo" onclick="closeNewsPhoto()">&times;</span>
     <img id="newsPhotoLarge" src="" alt="News photo preview">
 </div>
+
 <script type="module" src="admin/home.js"></script>
+<script type="module" src="live-scores.js"></script>
+
 </body>
 </html>

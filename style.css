@@ -795,3 +795,79 @@ footer p {
         height: 280px;
     }
 }
+
+/* PROFESSIONAL LIVE SCORES */
+
+#live-scores {
+    background: #f4f7f5;
+    padding: 35px 20px;
+}
+
+#live-scores h2 {
+    color: #063b20;
+    text-align: center;
+    margin-bottom: 25px;
+    font-weight: 800;
+}
+
+#liveScoresContainer {
+    max-width: 900px;
+    margin: auto;
+}
+
+#liveScoresContainer .result-card {
+    background: white;
+    border-left: 5px solid #e32636;
+    border-radius: 12px;
+    padding: 22px;
+    text-align: center;
+    box-shadow: 0 5px 18px rgba(0,0,0,0.08);
+    transition: transform 0.2s ease;
+}
+
+#liveScoresContainer .result-card:hover {
+    transform: translateY(-4px);
+}
+
+#liveScoresContainer .result-card h3 {
+    color: #063b20;
+    font-size: 19px;
+    margin: 12px 0;
+}
+
+#liveScoresContainer .result-card h2 {
+    color: #168044;
+    font-size: 34px;
+    margin: 10px 0;
+}
+
+#liveScoresContainer .result-card p {
+    display: inline-block;
+    background: #e32636;
+    color: white;
+    padding: 5px 15px;
+    border-radius: 20px;
+    font-weight: bold;
+    font-size: 12px;
+    letter-spacing: 1px;
+}
+
+@media (max-width: 600px) {
+
+    #liveScoresContainer {
+        grid-template-columns: 1fr;
+    }
+
+    #liveScoresContainer .result-card {
+        padding: 18px;
+    }
+
+    #liveScoresContainer .result-card h3 {
+        font-size: 16px;
+    }
+
+    #liveScoresContainer .result-card h2 {
+        font-size: 29px;
+    }
+
+}
