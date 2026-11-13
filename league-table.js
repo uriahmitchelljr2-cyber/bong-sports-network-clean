@@ -144,33 +144,65 @@ async function loadLeagueTable() {
 
     });
 
-    // 7. Display the standings
-    tableBody.innerHTML = '';
+    
+// 7. Display the standings
+tableBody.innerHTML = '';
 
-    standings.forEach(function(team, index) {
+standings.forEach(function(team, index) {
 
-        const row = document.createElement('tr');
+    const row = document.createElement('tr');
 
-        row.innerHTML = `
-            <td>${index + 1}</td>
-            <td>${team.club}</td>
-            <td>${team.played}</td>
-            <td>${team.won}</td>
-            <td>${team.drawn}</td>
-            <td>${team.lost}</td>
-            <td>${team.goalsFor}</td>
-            <td>${team.goalsAgainst}</td>
-            <td>${team.goalDifference}</td>
-            <td><strong>${team.points}</strong></td>
-        `;
+    // Highlight the top three positions
+    if (index === 0) {
+        row.classList.add('first-place');
+    } else if (index === 1) {
+        row.classList.add('second-place');
+    } else if (index === 2) {
+        row.classList.add('third-place');
+    }
 
-        tableBody.appendChild(row);
+    row.innerHTML = `
+        <td>${index + 1}</td>
+        <td>${team.club}</td>
+        <td>${team.played}</td>
+        <td>${team.won}</td>
+        <td>${team.drawn}</td>
+        <td>${team.lost}</td>
+        <td>${team.goalsFor}</td>
+        <td>${team.goalsAgainst}</td>
+        <td>${team.goalDifference}</td>
+        <td><strong>${team.points}</strong></td>
+    `;
 
-    });
+    tableBody.appendChild(row);
+
+});
+
 
     tableMessage.textContent =
         'League standings updated successfully.';
 
 }
 
+// Load league table when the page opens
 loadLeagueTable();
+
+// Listen for changes to matches in Supabase
+supabase
+    .channel('league-table-updates')
+    .on(
+        'postgres_changes',
+        {
+            event: '*',
+            schema: 'public',
+            table: 'matches'
+        },
+        function(payload) {
+
+            console.log('League match updated:', payload);
+
+            loadLeagueTable();
+
+        }
+    )
+    .subscribe();

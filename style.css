@@ -871,3 +871,199 @@ footer p {
     }
 
 }
+
+/* PROFESSIONAL LEAGUE TABLE */
+
+.league-container {
+    max-width: 1200px;
+    margin: 40px auto;
+    padding: 25px;
+    background: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.07);
+}
+
+.league-heading {
+    background: #063b20;
+    color: white;
+    text-align: center;
+    padding: 35px 20px;
+    border-radius: 10px;
+    margin-bottom: 25px;
+}
+
+.league-heading h2 {
+    font-size: 25px;
+    margin: 12px 0;
+}
+
+.league-heading h3 {
+    color: #d9f2df;
+    margin: 8px 0;
+}
+
+.league-label {
+    color: #b9e6c8;
+    font-size: 12px;
+    font-weight: bold;
+    letter-spacing: 2px;
+}
+
+.league-subtitle {
+    color: #d9f2df;
+    font-size: 14px;
+}
+
+.league-status {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    margin-bottom: 15px;
+    color: #555;
+    font-size: 14px;
+}
+
+.status-dot {
+    width: 9px;
+    height: 9px;
+    background: #168044;
+    border-radius: 50%;
+}
+
+.league-table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 750px;
+}
+
+.league-table thead {
+    background: #063b20;
+    color: white;
+}
+
+.league-table th {
+    padding: 15px 10px;
+    font-size: 13px;
+    text-align: center;
+}
+
+.league-table td {
+    padding: 15px 10px;
+    text-align: center;
+    border-bottom: 1px solid #eeeeee;
+    font-size: 14px;
+}
+
+.league-table tbody tr:nth-child(even) {
+    background: #f5f8f6;
+}
+
+.league-table tbody tr:hover {
+    background: #e8f5ec;
+}
+
+.league-table td:nth-child(2) {
+    text-align: left;
+    font-weight: bold;
+    color: #063b20;
+}
+
+.league-table td:first-child {
+    font-weight: bold;
+}
+
+.league-table td:last-child {
+    color: #168044;
+    font-weight: bold;
+}
+
+.league-legend {
+    margin-top: 25px;
+    padding: 18px;
+    background: #f4f7f5;
+    border-radius: 8px;
+}
+
+.league-legend h4 {
+    color: #063b20;
+    margin-bottom: 10px;
+}
+
+.league-legend p {
+    font-size: 13px;
+    line-height: 1.8;
+    color: #555;
+}
+
+.league-legend strong {
+    margin-right: 5px;
+    color: #063b20;
+}
+
+.league-footer {
+    text-align: center;
+    color: #777;
+    font-size: 13px;
+    margin-top: 25px;
+}
+
+@media (max-width: 600px) {
+
+    .league-container {
+        margin: 15px 8px;
+        padding: 12px;
+    }
+
+    .league-heading {
+        padding: 25px 12px;
+    }
+
+    .league-heading h2 {
+        font-size: 19px;
+    }
+
+    .league-heading h3 {
+        font-size: 15px;
+    }
+
+    .table-responsive {
+        overflow-x: auto;
+        width: 100%;
+    }
+
+    .league-table th,
+    .league-table td {
+        padding: 12px 8px;
+        font-size: 12px;
+    }
+
+}
+
+/* TOP THREE LEAGUE POSITIONS */
+
+.league-table tbody tr.first-place {
+    background: #fff4cc;
+    font-weight: bold;
+}
+
+.league-table tbody tr.second-place {
+    background: #eeeeee;
+    font-weight: bold;
+}
+
+.league-table tbody tr.third-place {
+    background: #f8e1d2;
+    font-weight: bold;
+}
+
+.league-table tbody tr.first-place td:first-child {
+    color: #b8860b;
+}
+
+.league-table tbody tr.second-place td:first-child {
+    color: #777777;
+}
+
+.league-table tbody tr.third-place td:first-child {
+    color: #a0522d;
+}

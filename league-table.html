@@ -4,7 +4,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>Bong County Third Division League Table | Bong Sports Network</title>
+
     <link rel="stylesheet" href="style.css">
 </head>
 
@@ -17,13 +19,29 @@
 
     <main class="league-container">
 
-        <h2>LFA Bong Sub-Association 3rd Division League</h2>
-        <h3>2026/2027 Season - League Table</h3>
+        <div class="league-heading">
 
-        <p id="tableMessage">Loading league table...</p>
+            <p class="league-label">OFFICIAL LEAGUE STANDINGS</p>
+
+            <h2>LFA Bong Sub-Association 3rd Division League</h2>
+
+            <h3>2026/2027 Season</h3>
+
+            <p class="league-subtitle">
+                Bong County Football Competition
+            </p>
+
+        </div>
+
+        <div class="league-status">
+            <span class="status-dot"></span>
+            <p id="tableMessage">Loading league table...</p>
+        </div>
 
         <div class="table-responsive">
+
             <table class="league-table">
+
                 <thead>
                     <tr>
                         <th>Pos</th>
@@ -40,12 +58,40 @@
                 </thead>
 
                 <tbody id="leagueTableBody">
+
                     <tr>
-                        <td colspan="10">Loading...</td>
+                        <td colspan="10">Loading standings...</td>
                     </tr>
+
                 </tbody>
+
             </table>
+
         </div>
+
+        <div class="league-legend">
+
+            <h4>Table Guide</h4>
+
+            <p>
+                <strong>P:</strong> Played
+                <strong>W:</strong> Won
+                <strong>D:</strong> Drawn
+                <strong>L:</strong> Lost
+            </p>
+
+            <p>
+                <strong>GF:</strong> Goals For
+                <strong>GA:</strong> Goals Against
+                <strong>GD:</strong> Goal Difference
+                <strong>Pts:</strong> Points
+            </p>
+
+        </div>
+
+        <p class="league-footer">
+            Powered by Bong Sports Network
+        </p>
 
     </main>
 
