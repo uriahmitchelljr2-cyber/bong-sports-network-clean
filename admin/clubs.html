@@ -62,6 +62,18 @@
                             placeholder="Enter club location">
                     </div>
 
+<div class="form-group">
+    <label for="clubLogo">Club Logo</label>
+    <input type="file" id="clubLogo"
+        accept="image/png, image/jpeg, image/webp">
+
+    <img id="logoPreview"
+        src=""
+        alt="Club logo preview"
+        style="display:none; width:120px; height:120px; object-fit:contain; margin-top:10px;">
+</div>
+
+
                     <button type="submit" id="saveClub">
                         Register Club
                     </button>
