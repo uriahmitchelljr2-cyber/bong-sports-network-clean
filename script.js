@@ -169,43 +169,60 @@ async function displayResults() {
 
 }
 
-// NATIONAL COUNTY SPORTS MEET UPCOMING FIXTURES
 
-const fixtures = [
+// LOAD UPCOMING FIXTURES FROM SUPABASE
 
-    {
-        home: "Bong County",
-        away: "Grand Cape Mount County",
-        date: "Upcoming Match-National County Sports Meet"
-    },
-
-    {
-        home: "Bong County",
-        away: "Maryland County",
-        date: "Upcoming Match-National County Sports Meet"
-    }
-
-];
-
-
-function displayFixtures() {
+async function displayFixtures() {
 
     const container = document.getElementById("fixturesContainer");
 
-    container.innerHTML = "";
+    container.innerHTML = "<p>Loading upcoming fixtures...</p>";
 
-    fixtures.forEach(match => {
+    const { data, error } = await supabase
+        .from('matches')
+        .select(`
+            home_club_name,
+            away_club_name,
+            match_date,
+            venue,
+            competition
+        `)
+        .eq('status', 'Upcoming')
+        .order('match_date', { ascending: true })
+        .limit(6);
+
+    if (error) {
+
+        console.error('Error loading fixtures:', error);
+
+        container.innerHTML = "<p>Unable to load upcoming fixtures.</p>";
+
+        return;
+    }
+
+    if (!data || data.length === 0) {
+
+        container.innerHTML = "<p>No upcoming fixtures scheduled.</p>";
+
+        return;
+    }
+
+    container.innerHTML = '';
+
+    data.forEach(match => {
 
         container.innerHTML += `
-
             <div class="fixture-card">
 
-                <h3>${match.home} VS ${match.away}</h3>
+                <h3>${match.home_club_name} VS ${match.away_club_name}</h3>
 
-                <p>${match.date}</p>
+                <p>${match.competition || 'Upcoming Match'}</p>
+
+                <p>${match.match_date || 'Date to be announced'}</p>
+
+                <p>${match.venue || 'Venue to be announced'}</p>
 
             </div>
-
         `;
 
     });
