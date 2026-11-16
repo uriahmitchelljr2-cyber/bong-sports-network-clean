@@ -232,13 +232,13 @@ async function displayFixtures() {
 
 // MOBILE MENU
 
-function toggleMenu() {
+window.toggleMenu = function() {
 
     document
         .getElementById("navigation")
         .classList.toggle("active");
 
-}
+};
 
 
 // AUTOMATIC COPYRIGHT YEAR
