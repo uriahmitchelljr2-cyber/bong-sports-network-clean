@@ -127,7 +127,6 @@ footer {
 
 #newsContainer,
 #clubsContainer,
-#matchesContainer,
 #playersContainer {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
