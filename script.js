@@ -1,3 +1,4 @@
+import { supabase } from './supabase.js';
 // WEBSITE NEWS
 
 const news = [
@@ -116,53 +117,57 @@ function searchNews() {
 }
 
 
-// MATCH RESULTS
+// LOAD RECENT MATCH RESULTS FROM SUPABASE
 
-const results = [
-
-    {
-        home: "Rainbow FC",
-        away: "Bong Investment Academy",
-        score: "3 - 1"
-    },
-
-    {
-        home: "Bong County",
-        away: "Nimba County",
-        score: "2 - 1"
-    }
-
-];
-
-
-function displayResults() {
+async function displayResults() {
 
     const container = document.getElementById("resultsContainer");
 
-    container.innerHTML = "";
+    container.innerHTML = "<p>Loading recent results...</p>";
 
-    results.forEach(match => {
+    const { data, error } = await supabase
+        .from('matches')
+        .select(`
+            home_club_name,
+            away_club_name,
+            home_score,
+            away_score,
+            match_date,
+            status
+        `)
+        .eq('status', 'Completed')
+        .order('match_date', { ascending: false })
+        .limit(6);
+
+    if (error) {
+        console.error('Error loading results:', error);
+        container.innerHTML = "<p>Unable to load recent results.</p>";
+        return;
+    }
+
+    if (!data || data.length === 0) {
+        container.innerHTML = "<p>No completed matches yet.</p>";
+        return;
+    }
+
+    container.innerHTML = '';
+
+    data.forEach(match => {
 
         container.innerHTML += `
-
             <div class="result-card">
-
-                <h3>${match.home}</h3>
-
-                <h2>${match.score}</h2>
-
-                <h3>${match.away}</h3>
-
+                <div class="result-teams">
+                    <h3>${match.home_club_name}</h3>
+                    <h2>${match.home_score} - ${match.away_score}</h2>
+                    <h3>${match.away_club_name}</h3>
+                </div>
                 <p>Full Time</p>
-
             </div>
-
         `;
 
     });
 
 }
-
 
 // NATIONAL COUNTY SPORTS MEET UPCOMING FIXTURES
 

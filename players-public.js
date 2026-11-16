@@ -22,31 +22,19 @@ async function loadPlayers() {
         return;
     }
 
-    playersContainer.innerHTML = '';
+   card.innerHTML = `
+    ${player.photo_url ? `
+        <img src="${player.photo_url}"
+             alt="${player.full_name || 'Player'}"
+             class="player-photo">
+    ` : ''}
 
-    data.forEach(function(player) {
-        const card = document.createElement('div');
-        card.className = 'player-card';
-
-        card.innerHTML = `
-            <h3>${player.full_name || 'Unknown Player'}</h3>
-            <p><strong>Age:</strong> ${player.age ?? 'Not provided'}</p>
-            <p><strong>Position:</strong> ${player.position || 'Not provided'}</p>
-            <p><strong>Preferred Foot:</strong> ${player.preferred_foot || 'Not provided'}</p>
-            <p><strong>Club:</strong> ${player.club || 'Not assigned'}</p>
-            <p><strong>Jersey Number:</strong> ${player.jersey_number ?? 'Not provided'}</p>
-            <p>${player.biography || ''}</p>
-        `;
-
-        card.style.cursor = 'pointer';
-
-card.addEventListener('click', () => {
-    window.location.href =
-        'player-profile.html?id=' + encodeURIComponent(player.id);
-});
-
-playersContainer.appendChild(card);
-    });
-}
-
+    <h3>${player.full_name || 'Unknown Player'}</h3>
+    <p><strong>Age:</strong> ${player.age ?? 'Not provided'}</p>
+    <p><strong>Position:</strong> ${player.position || 'Not provided'}</p>
+    <p><strong>Preferred Foot:</strong> ${player.preferred_foot || 'Not provided'}</p>
+    <p><strong>Club:</strong> ${player.club || 'Not assigned'}</p>
+    <p><strong>Jersey Number:</strong> ${player.jersey_number ?? 'Not provided'}</p>
+    <p>${player.biography || ''}</p>
+`;
 loadPlayers();

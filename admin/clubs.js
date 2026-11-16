@@ -78,6 +78,13 @@ clubLogo.addEventListener('change', function() {
     previewObjectUrl = URL.createObjectURL(file);
 
     logoPreview.src = previewObjectUrl;
+    logoPreview.onload = function() {
+    console.log('Club logo preview loaded successfully.');
+};
+
+logoPreview.onerror = function() {
+    console.error('Club logo preview failed to load.');
+};
     logoPreview.style.display = 'block';
 
     clubMessage.textContent = 'Logo selected successfully.';
