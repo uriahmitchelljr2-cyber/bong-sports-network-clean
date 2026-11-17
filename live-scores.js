@@ -87,6 +87,19 @@ async function loadLiveScores() {
         liveScoresContainer.textContent = 'Unable to load live scores.';
         return;
     }
+    // LOAD CLUB LOGOS
+
+const { data: clubs, error: clubsError } = await supabase
+    .from('clubs')
+    .select('club_name, logo_url');
+
+if (clubsError) {
+    console.error('Unable to load club logos:', clubsError);
+}
+
+const clubLogos = new Map(
+    (clubs || []).map(club => [club.club_name, club.logo_url])
+);
 
     liveScoresContainer.innerHTML = '';
 
@@ -100,12 +113,46 @@ async function loadLiveScores() {
         const matchCard = document.createElement('div');
         matchCard.className = 'result-card';
 
-        const teams = document.createElement('h3');
-        teams.textContent =
-            (match.home_club_name || 'Home Team') +
-            ' vs ' +
-            (match.away_club_name || 'Away Team');
+        // DISPLAY CLUB NAMES AND LOGOS
 
+const teams = document.createElement('div');
+teams.className = 'live-teams';
+
+function addTeam(name) {
+
+    const team = document.createElement('div');
+    team.className = 'live-team';
+
+    const logoUrl = clubLogos.get(name);
+
+    if (logoUrl) {
+        const logo = document.createElement('img');
+        logo.src = logoUrl;
+        logo.alt = name + ' logo';
+        logo.className = 'live-club-logo';
+
+        team.appendChild(logo);
+    }
+
+    const teamName = document.createElement('span');
+    teamName.textContent = name;
+
+    team.appendChild(teamName);
+
+    return team;
+}
+
+teams.appendChild(
+    addTeam(match.home_club_name || 'Home Team')
+);
+
+const versus = document.createElement('span');
+versus.textContent = 'vs';
+teams.appendChild(versus);
+
+teams.appendChild(
+    addTeam(match.away_club_name || 'Away Team')
+);
         const score = document.createElement('h2');
         score.textContent =
             (match.home_score ?? 0) +

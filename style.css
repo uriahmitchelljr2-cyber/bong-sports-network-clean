@@ -1121,3 +1121,30 @@ footer p {
     border-radius: 8px;
     display: inline-block;
 }
+
+/* LIVE SCORE CLUB LOGOS */
+
+.live-teams {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+    flex-wrap: wrap;
+    margin: 15px 0;
+}
+
+.live-team {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    font-weight: bold;
+    text-align: center;
+}
+
+.live-club-logo {
+    width: 65px;
+    height: 65px;
+    object-fit: contain;
+    border-radius: 50%;
+} 
