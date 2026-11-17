@@ -484,14 +484,14 @@ async function controlMatchClock(match, action) {
 
     else if (action === 'resume') {
 
-        updates = {
-            clock_status: 'running',
-            clock_started_at: new Date().toISOString(),
-            clock_period: 'Second Half'
-        };
+    updates = {
+        clock_status: 'running',
+        clock_started_at: new Date().toISOString(),
+        clock_seconds: 2700,
+        clock_period: 'Second Half'
+    };
 
-    }
-
+}
     else if (action === 'fulltime') {
 
         const elapsed = Math.floor(
