@@ -1102,3 +1102,22 @@ footer p {
     text-align: center;
     margin-top: 12px;
 }
+
+/* PROFESSIONAL LIVE MATCH CLOCK */
+
+.live-match-clock {
+    font-size: 32px;
+    font-weight: bold;
+    color: #008000;
+    text-align: center;
+    margin: 15px 0;
+    letter-spacing: 2px;
+    font-family: monospace;
+}
+
+.live-match-clock {
+    background: #f1f8f1;
+    padding: 12px;
+    border-radius: 8px;
+    display: inline-block;
+}
