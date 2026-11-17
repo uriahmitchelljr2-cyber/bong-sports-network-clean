@@ -3,6 +3,47 @@ import { supabase } from './supabase.js';
 
 const liveScoresContainer = document.getElementById('liveScoresContainer');
 
+// FORMAT MATCH CLOCK
+
+function formatMatchClock(match) {
+
+    let seconds = match.clock_seconds || 0;
+
+    if (
+        match.clock_status === 'running' &&
+        match.clock_started_at
+    ) {
+        const startedAt = new Date(match.clock_started_at).getTime();
+
+        seconds += Math.floor((Date.now() - startedAt) / 1000);
+    }
+
+    const minutes = Math.floor(seconds / 60);
+
+    return minutes + "'";
+}
+// AUTOMATIC LIVE CLOCK UPDATE
+
+setInterval(function() {
+
+    document.querySelectorAll('.live-match-clock').forEach(function(clock) {
+
+        let seconds = Number(clock.dataset.seconds) || 0;
+
+        if (
+            clock.dataset.status === 'running' &&
+            clock.dataset.startedAt
+        ) {
+            const startedAt = new Date(clock.dataset.startedAt).getTime();
+
+            seconds += Math.floor((Date.now() - startedAt) / 1000);
+        }
+
+        clock.textContent = Math.floor(seconds / 60) + "'";
+
+    });
+
+}, 1000);
 async function loadLiveScores() {
 
     liveScoresContainer.textContent = 'Loading live scores...';
@@ -10,15 +51,20 @@ async function loadLiveScores() {
     const { data: matches, error } = await supabase
         .from('matches')
         .select(`
-            competition,
-            home_club_name,
-            away_club_name,
-            home_score,
-            away_score,
-            match_date,
-            venue,
-            status
-        `)
+    id,
+    competition,
+    home_club_name,
+    away_club_name,
+    home_score,
+    away_score,
+    match_date,
+    venue,
+    status,
+    clock_status,
+    clock_started_at,
+    clock_seconds,
+    clock_period
+`)
         .eq('competition', 'LFA Bong Sub-Association 3rd Division League')
         .eq('status', 'Live')
         .order('match_date', { ascending: true });
@@ -54,11 +100,23 @@ async function loadLiveScores() {
             (match.away_score ?? 0);
 
         const status = document.createElement('p');
-        status.textContent = 'LIVE';
 
-        matchCard.appendChild(status);
-        matchCard.appendChild(teams);
-        matchCard.appendChild(score);
+status.textContent = match.clock_period || 'LIVE';
+
+const clock = document.createElement('h2');
+
+clock.className = 'live-match-clock';
+
+clock.dataset.seconds = match.clock_seconds || 0;
+clock.dataset.status = match.clock_status || '';
+clock.dataset.startedAt = match.clock_started_at || '';
+
+clock.textContent = formatMatchClock(match);
+
+       matchCard.appendChild(status);
+matchCard.appendChild(clock);
+matchCard.appendChild(teams);
+matchCard.appendChild(score);
 
         liveScoresContainer.appendChild(matchCard);
 

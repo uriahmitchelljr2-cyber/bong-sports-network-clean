@@ -191,16 +191,20 @@ async function loadMatches(search = '') {
     let query = supabase
     .from('matches')
     .select(`
-        id,
-        competition,
-        home_club_name,
-        away_club_name,
-        match_date,
-        venue,
-        home_score,
-        away_score,
-        status
-    `)
+    id,
+    competition,
+    home_club_name,
+    away_club_name,
+    match_date,
+    venue,
+    home_score,
+    away_score,
+    status,
+    clock_status,
+    clock_started_at,
+    clock_seconds,
+    clock_period
+`)
     .order('match_date', { ascending: false });
 
     if (search.trim() !== '') {
@@ -235,7 +239,7 @@ async function loadMatches(search = '') {
     }
 
     data.forEach(function(match) {
-
+console.log('MATCH CLOCK DATA:', match);
         const row = document.createElement('tr');
 
         const competitionCell = document.createElement('td');
@@ -309,7 +313,51 @@ awayCell.textContent = match.away_club_name || '';
 
         });
 
-        actionCell.append(editButton, deleteButton);
+       actionCell.append(editButton, deleteButton);
+
+// MATCH CLOCK CONTROLS
+
+if (match.status === 'Live' && match.clock_period !== 'Full-Time') {
+
+    if (match.clock_status === 'running') {
+
+        const halfTimeButton = document.createElement('button');
+        halfTimeButton.textContent = 'Half-Time';
+        halfTimeButton.className = 'action-button';
+
+        halfTimeButton.addEventListener('click', function() {
+            controlMatchClock(match, 'halftime');
+        });
+
+        const fullTimeButton = document.createElement('button');
+        fullTimeButton.textContent = 'Full-Time';
+        fullTimeButton.className = 'action-button';
+
+        fullTimeButton.addEventListener('click', function() {
+            controlMatchClock(match, 'fulltime');
+        });
+
+        actionCell.append(halfTimeButton, fullTimeButton);
+
+    } else {
+
+        const clockButton = document.createElement('button');
+
+        clockButton.textContent =
+            match.clock_period === 'Half-Time' ? 'Resume Second Half' : 'Start First Half';
+
+        clockButton.className = 'action-button';
+
+        clockButton.addEventListener('click', function() {
+            controlMatchClock(
+                match,
+                match.clock_period === 'Half-Time' ? 'resume' : 'start'
+            );
+        });
+
+        actionCell.appendChild(clockButton);
+    }
+}
 
         row.append(
             competitionCell,
@@ -400,4 +448,89 @@ async function startMatchManagement() {
 
 }
 
+// ===================================
+// BSN MATCH CLOCK ACTIONS
+// ===================================
+
+async function controlMatchClock(match, action) {
+
+    let updates = {};
+
+    if (action === 'start') {
+
+        updates = {
+            clock_status: 'running',
+            clock_started_at: new Date().toISOString(),
+            clock_seconds: 0,
+            clock_period: 'First Half'
+        };
+
+    }
+
+    else if (action === 'halftime') {
+
+        const elapsed = Math.floor(
+            (Date.now() - new Date(match.clock_started_at).getTime()) / 1000
+        );
+
+        updates = {
+            clock_status: 'paused',
+            clock_seconds: (match.clock_seconds || 0) + elapsed,
+            clock_started_at: null,
+            clock_period: 'Half-Time'
+        };
+
+    }
+
+    else if (action === 'resume') {
+
+        updates = {
+            clock_status: 'running',
+            clock_started_at: new Date().toISOString(),
+            clock_period: 'Second Half'
+        };
+
+    }
+
+    else if (action === 'fulltime') {
+
+        const elapsed = Math.floor(
+            (Date.now() - new Date(match.clock_started_at).getTime()) / 1000
+        );
+
+        updates = {
+            clock_status: 'finished',
+            clock_seconds: (match.clock_seconds || 0) + elapsed,
+            clock_started_at: null,
+            clock_period: 'Full-Time',
+            status: 'Completed'
+        };
+
+    }
+
+    const success = await updateMatchClock(match.id, updates);
+
+    if (success) {
+        alert('Match clock updated successfully!');
+    }
+
+}
+
+async function updateMatchClock(matchId, updates) {
+
+    const { error } = await supabase
+        .from('matches')
+        .update(updates)
+        .eq('id', matchId);
+
+    if (error) {
+        alert('Clock update failed: ' + error.message);
+        console.error(error);
+        return false;
+    }
+
+    await loadMatches(searchMatch.value);
+
+    return true;
+}
 startMatchManagement();
