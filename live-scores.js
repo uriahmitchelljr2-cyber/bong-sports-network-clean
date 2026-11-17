@@ -18,9 +18,15 @@ function formatMatchClock(match) {
         seconds += Math.floor((Date.now() - startedAt) / 1000);
     }
 
-    const minutes = Math.floor(seconds / 60);
+    const hours = Math.floor(seconds / 3600);
+    const minutes = Math.floor((seconds % 3600) / 60);
+    const remainingSeconds = seconds % 60;
 
-    return minutes + "'";
+    return (
+        String(hours).padStart(2, '0') + ':' +
+        String(minutes).padStart(2, '0') + ':' +
+        String(remainingSeconds).padStart(2, '0')
+    );
 }
 // AUTOMATIC LIVE CLOCK UPDATE
 
@@ -39,7 +45,14 @@ setInterval(function() {
             seconds += Math.floor((Date.now() - startedAt) / 1000);
         }
 
-        clock.textContent = Math.floor(seconds / 60) + "'";
+        const hours = Math.floor(seconds / 3600);
+        const minutes = Math.floor((seconds % 3600) / 60);
+        const remainingSeconds = seconds % 60;
+
+        clock.textContent =
+            String(hours).padStart(2, '0') + ':' +
+            String(minutes).padStart(2, '0') + ':' +
+            String(remainingSeconds).padStart(2, '0');
 
     });
 
