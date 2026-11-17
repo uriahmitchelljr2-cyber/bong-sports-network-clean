@@ -728,6 +728,17 @@ footer p {
     line-height: 1.5;
 }
 
+/* PLAYER PROFILE PHOTO SIZE */
+
+.player-card img {
+    width: 120px;
+    height: 120px;
+    object-fit: cover;
+    display: block;
+    margin: 10px auto;
+    border-radius: 8px;
+}
+
 /* REGISTERED CLUBS */
 #clubsContainer {
     display: grid;
@@ -1148,3 +1159,13 @@ footer p {
     object-fit: contain;
     border-radius: 50%;
 } 
+
+/* CLUB PROFILE LOGO SIZE */
+
+.public-club-card img {
+    width: 100px;
+    height: 100px;
+    object-fit: contain;
+    display: block;
+    margin: 10px auto;
+}
