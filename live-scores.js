@@ -74,6 +74,7 @@ setInterval(function() {
     });
 
 }, 1000);
+
 async function loadLiveScores() {
 
     liveScoresContainer.textContent = 'Loading live scores...';
@@ -95,7 +96,6 @@ async function loadLiveScores() {
     clock_seconds,
     clock_period
 `)
-        .eq('competition', 'LFA Bong Sub-Association 3rd Division League')
         .eq('status', 'Live')
         .order('match_date', { ascending: true });
 
