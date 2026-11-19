@@ -326,6 +326,16 @@ eventsButton.addEventListener('click', function() {
     manageMatchEvents(match);
 });
 
+const viewEventsButton = document.createElement('button');
+
+viewEventsButton.textContent = 'View Events';
+viewEventsButton.className = 'action-button';
+
+viewEventsButton.addEventListener('click', function() {
+    viewMatchEvents(match);
+});
+
+actionCell.appendChild(viewEventsButton);
 actionCell.appendChild(eventsButton);
 
 // MATCH CLOCK CONTROLS
@@ -656,4 +666,131 @@ alert('Match event saved successfully!');
         match.away_club_name
     );
 
+}
+
+
+async function viewMatchEvents(match) {
+
+    const { data: events, error } = await supabase
+        .from('match_events')
+        .select('*')
+        .eq('match_id', match.id)
+        .order('event_minute', { ascending: true });
+
+    if (error) {
+        alert('Unable to load match events: ' + error.message);
+        return;
+    }
+
+    if (!events || events.length === 0) {
+        alert('No events recorded for this match.');
+        return;
+    }
+
+    let message = 'MATCH EVENTS\n\n';
+
+    events.forEach(function(event, index) {
+        message +=
+            (index + 1) + '. ' +
+            event.event_minute + "' - " +
+            event.event_type + ' - ' +
+            event.player_name + '\n';
+    });
+
+    const choice = prompt(
+        message +
+        '\nEnter the event number to manage:'
+    );
+
+    if (!choice) return;
+
+    const selectedEvent = events[Number(choice) - 1];
+
+    if (!selectedEvent) {
+        alert('Invalid event number.');
+        return;
+    }
+
+    const action = prompt(
+        'Choose an action:\n' +
+        '1. Edit Event\n' +
+        '2. Delete Event'
+    );
+
+    if (action === '2') {
+
+        const confirmed = confirm(
+            'Are you sure you want to delete this event?'
+        );
+
+        if (!confirmed) return;
+
+        const { error: deleteError } = await supabase
+            .from('match_events')
+            .delete()
+            .eq('id', selectedEvent.id)
+            .eq('match_id', match.id);
+
+        if (deleteError) {
+            alert('Delete failed: ' + deleteError.message);
+            return;
+        }
+
+        alert('Match event deleted successfully!');
+        return;
+    }
+
+    if (action === '1') {
+
+        const playerName = prompt(
+            'Enter player name:',
+            selectedEvent.player_name || ''
+        );
+
+        if (!playerName) return;
+
+        const eventMinute = prompt(
+            'Enter match minute:',
+            selectedEvent.event_minute
+        );
+
+        if (!eventMinute || isNaN(eventMinute)) {
+            alert('Invalid match minute.');
+            return;
+        }
+
+        const { error: updateError } = await supabase
+            .from('match_events')
+            .update({
+                player_name: playerName,
+                event_minute: Number(eventMinute)
+            })
+            .eq('id', selectedEvent.id)
+            .eq('match_id', match.id);
+
+        if (updateError) {
+            alert('Update failed: ' + updateError.message);
+            return;
+        }
+
+        alert('Match event updated successfully!');
+        return;
+    }
+
+    alert('Invalid action selected.');
+}
+
+
+    let message = 'MATCH EVENTS\n\n';
+
+    events.forEach(function(event) {
+
+        message +=
+            event.event_minute + "' - " +
+            event.event_type + ' - ' +
+            event.player_name + '\n';
+
+    });
+
+    alert(message);
 }
