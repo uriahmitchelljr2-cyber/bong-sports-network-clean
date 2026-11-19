@@ -87,6 +87,7 @@ async function loadLiveScores() {
         liveScoresContainer.textContent = 'Unable to load live scores.';
         return;
     }
+
     // LOAD CLUB LOGOS
 
 const { data: clubs, error: clubsError } = await supabase
@@ -107,6 +108,22 @@ const clubLogos = new Map(
         liveScoresContainer.textContent = 'No live matches at the moment.';
         return;
     }
+
+    // LOAD EVENTS FOR LIVE MATCHES
+
+const matchIds = matches.map(function(match) {
+    return match.id;
+});
+
+const { data: matchEvents, error: eventsError } = await supabase
+    .from('match_events')
+    .select('*')
+    .in('match_id', matchIds)
+    .order('created_at', { ascending: true });
+
+if (eventsError) {
+    console.error('Unable to load match events:', eventsError);
+}
 
     matches.forEach(function(match) {
 
@@ -178,6 +195,55 @@ matchCard.appendChild(clock);
 matchCard.appendChild(teams);
 matchCard.appendChild(score);
 
+// DISPLAY MATCH EVENTS
+
+const eventsContainer = document.createElement('div');
+eventsContainer.className = 'live-match-events';
+
+const thisMatchEvents = (matchEvents || []).filter(function(event) {
+    return event.match_id === match.id;
+});
+
+thisMatchEvents.forEach(function(event) {
+
+    const eventItem = document.createElement('p');
+
+    let eventIcon = '';
+
+    if (event.event_type === 'Goal') {
+        eventIcon = '⚽';
+    } else if (event.event_type === 'Yellow Card') {
+        eventIcon = '🟨';
+    } else if (event.event_type === 'Red Card') {
+        eventIcon = '🟥';
+    } else if (event.event_type === 'Substitution') {
+        eventIcon = '🔄';
+    }
+
+    if (event.event_type === 'Substitution') {
+
+    eventItem.textContent =
+        '🔄 ' +
+        (event.event_minute ?? '') + "' - " +
+        event.player_name + ' OFF | ' +
+        event.related_player + ' ON (' +
+        event.team_name + ')';
+
+} else {
+
+    eventItem.textContent =
+        eventIcon + ' ' +
+        (event.event_minute ?? '') + "' - " +
+        event.player_name + ' (' +
+        event.team_name + ')';
+
+}
+
+    eventsContainer.appendChild(eventItem);
+
+});
+
+matchCard.appendChild(eventsContainer);
         liveScoresContainer.appendChild(matchCard);
 
     });

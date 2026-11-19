@@ -315,6 +315,19 @@ awayCell.textContent = match.away_club_name || '';
 
        actionCell.append(editButton, deleteButton);
 
+// MANAGE MATCH EVENTS BUTTON
+
+const eventsButton = document.createElement('button');
+
+eventsButton.textContent = 'Manage Events';
+eventsButton.className = 'action-button';
+
+eventsButton.addEventListener('click', function() {
+    manageMatchEvents(match);
+});
+
+actionCell.appendChild(eventsButton);
+
 // MATCH CLOCK CONTROLS
 
 if (match.status === 'Live' && match.clock_period !== 'Full-Time') {
@@ -534,3 +547,113 @@ async function updateMatchClock(matchId, updates) {
     return true;
 }
 startMatchManagement();
+
+// ===================================
+// MANAGE MATCH EVENTS
+// ===================================
+
+async function manageMatchEvents(match) {
+
+    const eventChoice = prompt(
+    'Select event type:\n' +
+    '1. Goal\n' +
+    '2. Yellow Card\n' +
+    '3. Red Card\n' +
+    '4. Substitution'
+);
+
+const eventTypes = {
+    '1': 'Goal',
+    '2': 'Yellow Card',
+    '3': 'Red Card',
+    '4': 'Substitution'
+};
+
+const eventType = eventTypes[eventChoice];
+
+if (!eventType) {
+    alert('Invalid event type selected.');
+    return;
+}
+
+    if (!eventType) {
+        return;
+    }
+let playerName = '';
+let relatedPlayer = '';
+
+if (eventType === 'Substitution') {
+
+    playerName = prompt('Enter the name of the player coming OFF:');
+
+    if (!playerName) {
+        return;
+    }
+
+    relatedPlayer = prompt('Enter the name of the player coming ON:');
+
+    if (!relatedPlayer) {
+        return;
+    }
+
+} else {
+
+    playerName = prompt('Enter player name:');
+
+    if (!playerName) {
+        return;
+    }
+
+}
+
+if (!playerName) {
+    return;
+}
+
+const eventMinute = prompt('Enter match minute (e.g. 23):');
+
+if (!eventMinute || isNaN(eventMinute)) {
+    return;
+}
+
+const teamName = prompt(
+    'Enter team name:\n' +
+    '1. ' + match.home_club_name + '\n' +
+    '2. ' + match.away_club_name
+);
+
+if (
+    teamName !== match.home_club_name &&
+    teamName !== match.away_club_name
+) {
+    alert('Please enter a valid team name.');
+    return;
+}
+
+const { error } = await supabase
+    .from('match_events')
+    .insert([
+        {
+            match_id: match.id,
+            event_type: eventType,
+            player_name: playerName,
+            related_player: relatedPlayer,
+            event_minute: Number(eventMinute),
+            team_name: teamName
+        }
+    ]);
+
+if (error) {
+    alert('Failed to save event: ' + error.message);
+    console.error(error);
+    return;
+}
+
+alert('Match event saved successfully!');
+    alert('Event selected for ' +
+        match.home_club_name +
+        ' vs ' +
+        match.away_club_name
+    );
+
+}

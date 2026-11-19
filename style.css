@@ -1169,3 +1169,24 @@ footer p {
     display: block;
     margin: 10px auto;
 }
+
+
+/* LIVE MATCH EVENTS */
+
+.live-match-events {
+    margin-top: 15px;
+    padding: 12px;
+    background: #f8f9fa;
+    border-left: 4px solid #16a34a;
+    border-radius: 6px;
+}
+
+.live-match-events p {
+    margin: 6px 0;
+    padding: 7px 10px;
+    background: white;
+    border-radius: 5px;
+    font-size: 14px;
+    font-weight: 500;
+    color: #333;
+}
