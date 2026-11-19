@@ -22,7 +22,7 @@ function formatMatchClock(match) {
 
         const addedMinutes = Math.ceil((seconds - 2700) / 60);
 
-        return '45+' + addedMinutes;
+        return '45+' + addedMinutes + " (STOPPAGE TIME)";
     }
 
     // SECOND HALF STOPPAGE TIME
@@ -30,7 +30,7 @@ function formatMatchClock(match) {
 
         const addedMinutes = Math.ceil((seconds - 5400) / 60);
 
-        return '90+' + addedMinutes;
+        return '90+' + addedMinutes + " (STOPPAGE TIME)";
     }
 
     // NORMAL MATCH TIME
