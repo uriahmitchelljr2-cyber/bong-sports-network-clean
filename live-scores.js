@@ -3,7 +3,6 @@ import { supabase } from './supabase.js';
 
 const liveScoresContainer = document.getElementById('liveScoresContainer');
 
-// FORMAT MATCH CLOCK
 
 function formatMatchClock(match) {
 
@@ -18,6 +17,23 @@ function formatMatchClock(match) {
         seconds += Math.floor((Date.now() - startedAt) / 1000);
     }
 
+    // FIRST HALF STOPPAGE TIME
+    if (seconds > 2700 && seconds <= 5400) {
+
+        const addedMinutes = Math.ceil((seconds - 2700) / 60);
+
+        return '45+' + addedMinutes;
+    }
+
+    // SECOND HALF STOPPAGE TIME
+    if (seconds > 5400) {
+
+        const addedMinutes = Math.ceil((seconds - 5400) / 60);
+
+        return '90+' + addedMinutes;
+    }
+
+    // NORMAL MATCH TIME
     const hours = Math.floor(seconds / 3600);
     const minutes = Math.floor((seconds % 3600) / 60);
     const remainingSeconds = seconds % 60;
@@ -28,6 +44,7 @@ function formatMatchClock(match) {
         String(remainingSeconds).padStart(2, '0')
     );
 }
+
 // AUTOMATIC LIVE CLOCK UPDATE
 
 setInterval(function() {
