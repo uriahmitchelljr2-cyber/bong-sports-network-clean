@@ -22,6 +22,7 @@ const searchMatch = document.getElementById('searchMatch');
 const matchesTable = document.getElementById('matchesTable');
 
 let editingMatchId = null;
+let matchData = {};
 
 
 // ===================================
@@ -54,35 +55,7 @@ async function checkAdmin() {
 
 
 // ===================================
-// 3. LOAD CLUBS INTO DROPDOWNS
-// ===================================
-
-let matchData = {
-
-    competition: competition.value.trim(),
-
-    home_club_name: homeClub.value.trim(),
-
-    away_club_name: awayClub.value.trim(),
-
-    match_date: matchDate.value,
-
-    venue: venue.value.trim(),
-
-    home_score: homeScore.value === ''
-        ? null
-        : Number(homeScore.value),
-
-    away_score: awayScore.value === ''
-        ? null
-        : Number(awayScore.value),
-
-    status: matchStatus.value
-
-};
-
-// ===================================
-// 4. RESET MATCH FORM
+// 3. RESET MATCH FORM
 // ===================================
 
 function resetMatchForm() {
@@ -98,17 +71,19 @@ function resetMatchForm() {
 
 
 // ===================================
-// 5. SCHEDULE OR UPDATE MATCH
+// 4. SCHEDULE OR UPDATE MATCH
 // ===================================
 
 matchForm.addEventListener('submit', async function(event) {
 
     event.preventDefault();
-if (!matchDate.value || isNaN(new Date(matchDate.value).getTime())) {
-    matchMessage.textContent =
-        'Please select a valid match date and time.';
-    return;
-}
+
+    if (!matchDate.value || isNaN(new Date(matchDate.value).getTime())) {
+        matchMessage.textContent =
+            'Please select a valid match date and time.';
+        return;
+    }
+
     if (homeClub.value === awayClub.value) {
         matchMessage.textContent =
             'Home club and away club must be different.';
@@ -117,27 +92,27 @@ if (!matchDate.value || isNaN(new Date(matchDate.value).getTime())) {
 
     matchData = {
 
-    competition: competition.value.trim(),
+        competition: competition.value.trim(),
 
-    home_club_name: homeClub.value.trim(),
+        home_club_name: homeClub.value.trim(),
 
-    away_club_name: awayClub.value.trim(),
+        away_club_name: awayClub.value.trim(),
 
-    match_date: new Date(matchDate.value).toISOString(),
+        match_date: new Date(matchDate.value).toISOString(),
 
-    venue: venue.value.trim(),
+        venue: venue.value.trim(),
 
-    home_score: homeScore.value === ''
-        ? null
-        : Number(homeScore.value),
+        home_score: homeScore.value === ''
+            ? null
+            : Number(homeScore.value),
 
-    away_score: awayScore.value === ''
-        ? null
-        : Number(awayScore.value),
+        away_score: awayScore.value === ''
+            ? null
+            : Number(awayScore.value),
 
-    status: matchStatus.value
+        status: matchStatus.value
 
-};
+    };
 
     matchMessage.textContent = 'Saving match...';
 
@@ -180,7 +155,7 @@ if (!matchDate.value || isNaN(new Date(matchDate.value).getTime())) {
 
 
 // ===================================
-// 6. LOAD MATCHES
+// 5. LOAD MATCHES
 // ===================================
 
 async function loadMatches(search = '') {
@@ -189,23 +164,23 @@ async function loadMatches(search = '') {
         '<tr><td colspan="7">Loading matches...</td></tr>';
 
     let query = supabase
-    .from('matches')
-    .select(`
-    id,
-    competition,
-    home_club_name,
-    away_club_name,
-    match_date,
-    venue,
-    home_score,
-    away_score,
-    status,
-    clock_status,
-    clock_started_at,
-    clock_seconds,
-    clock_period
-`)
-    .order('match_date', { ascending: false });
+        .from('matches')
+        .select(`
+            id,
+            competition,
+            home_club_name,
+            away_club_name,
+            match_date,
+            venue,
+            home_score,
+            away_score,
+            status,
+            clock_status,
+            clock_started_at,
+            clock_seconds,
+            clock_period
+        `)
+        .order('match_date', { ascending: false });
 
     if (search.trim() !== '') {
 
@@ -230,7 +205,7 @@ async function loadMatches(search = '') {
 
     matchesTable.innerHTML = '';
 
-    if (data.length === 0) {
+    if (!data || data.length === 0) {
 
         matchesTable.innerHTML =
             '<tr><td colspan="7">No matches found.</td></tr>';
@@ -239,7 +214,7 @@ async function loadMatches(search = '') {
     }
 
     data.forEach(function(match) {
-console.log('MATCH CLOCK DATA:', match);
+
         const row = document.createElement('tr');
 
         const competitionCell = document.createElement('td');
@@ -251,9 +226,10 @@ console.log('MATCH CLOCK DATA:', match);
         const actionCell = document.createElement('td');
 
         competitionCell.textContent = match.competition;
-homeCell.textContent = match.home_club_name || '';
 
-awayCell.textContent = match.away_club_name || '';
+        homeCell.textContent = match.home_club_name || '';
+
+        awayCell.textContent = match.away_club_name || '';
 
         dateCell.textContent = match.match_date
             ? new Date(match.match_date).toLocaleString()
@@ -267,6 +243,7 @@ awayCell.textContent = match.away_club_name || '';
 
         statusCell.textContent = match.status || '';
 
+
         // EDIT BUTTON
 
         const editButton = document.createElement('button');
@@ -277,6 +254,7 @@ awayCell.textContent = match.away_club_name || '';
         editButton.addEventListener('click', function() {
             editMatch(match);
         });
+
 
         // DELETE BUTTON
 
@@ -291,9 +269,7 @@ awayCell.textContent = match.away_club_name || '';
                 'Are you sure you want to delete this match?'
             );
 
-            if (!confirmed) {
-                return;
-            }
+            if (!confirmed) return;
 
             const { error: deleteError } = await supabase
                 .from('matches')
@@ -313,74 +289,91 @@ awayCell.textContent = match.away_club_name || '';
 
         });
 
-       actionCell.append(editButton, deleteButton);
+        actionCell.append(editButton, deleteButton);
 
-// MANAGE MATCH EVENTS BUTTON
 
-const eventsButton = document.createElement('button');
+        // MANAGE MATCH EVENTS BUTTON
 
-eventsButton.textContent = 'Manage Events';
-eventsButton.className = 'action-button';
+        const eventsButton = document.createElement('button');
 
-eventsButton.addEventListener('click', function() {
-    manageMatchEvents(match);
-});
+        eventsButton.textContent = 'Manage Events';
+        eventsButton.className = 'action-button';
 
-const viewEventsButton = document.createElement('button');
-
-viewEventsButton.textContent = 'View Events';
-viewEventsButton.className = 'action-button';
-
-viewEventsButton.addEventListener('click', function() {
-    viewMatchEvents(match);
-});
-
-actionCell.appendChild(viewEventsButton);
-actionCell.appendChild(eventsButton);
-
-// MATCH CLOCK CONTROLS
-
-if (match.status === 'Live' && match.clock_period !== 'Full-Time') {
-
-    if (match.clock_status === 'running') {
-
-        const halfTimeButton = document.createElement('button');
-        halfTimeButton.textContent = 'Half-Time';
-        halfTimeButton.className = 'action-button';
-
-        halfTimeButton.addEventListener('click', function() {
-            controlMatchClock(match, 'halftime');
+        eventsButton.addEventListener('click', function() {
+            manageMatchEvents(match);
         });
 
-        const fullTimeButton = document.createElement('button');
-        fullTimeButton.textContent = 'Full-Time';
-        fullTimeButton.className = 'action-button';
 
-        fullTimeButton.addEventListener('click', function() {
-            controlMatchClock(match, 'fulltime');
+        // VIEW MATCH EVENTS BUTTON
+
+        const viewEventsButton = document.createElement('button');
+
+        viewEventsButton.textContent = 'View Events';
+        viewEventsButton.className = 'action-button';
+
+        viewEventsButton.addEventListener('click', function() {
+            viewMatchEvents(match);
         });
 
-        actionCell.append(halfTimeButton, fullTimeButton);
+        actionCell.appendChild(viewEventsButton);
+        actionCell.appendChild(eventsButton);
 
-    } else {
 
-        const clockButton = document.createElement('button');
+        // MATCH CLOCK CONTROLS
 
-        clockButton.textContent =
-            match.clock_period === 'Half-Time' ? 'Resume Second Half' : 'Start First Half';
+        if (match.status === 'Live' && match.clock_period !== 'Full-Time') {
 
-        clockButton.className = 'action-button';
+            if (match.clock_status === 'running') {
 
-        clockButton.addEventListener('click', function() {
-            controlMatchClock(
-                match,
-                match.clock_period === 'Half-Time' ? 'resume' : 'start'
-            );
-        });
+                const halfTimeButton = document.createElement('button');
 
-        actionCell.appendChild(clockButton);
-    }
-}
+                halfTimeButton.textContent = 'Half-Time';
+                halfTimeButton.className = 'action-button';
+
+                halfTimeButton.addEventListener('click', function() {
+                    controlMatchClock(match, 'halftime');
+                });
+
+
+                const fullTimeButton = document.createElement('button');
+
+                fullTimeButton.textContent = 'Full-Time';
+                fullTimeButton.className = 'action-button';
+
+                fullTimeButton.addEventListener('click', function() {
+                    controlMatchClock(match, 'fulltime');
+                });
+
+                actionCell.append(halfTimeButton, fullTimeButton);
+
+            } else {
+
+                const clockButton = document.createElement('button');
+
+                clockButton.textContent =
+                    match.clock_period === 'Half-Time'
+                        ? 'Resume Second Half'
+                        : 'Start First Half';
+
+                clockButton.className = 'action-button';
+
+                clockButton.addEventListener('click', function() {
+
+                    controlMatchClock(
+                        match,
+                        match.clock_period === 'Half-Time'
+                            ? 'resume'
+                            : 'start'
+                    );
+
+                });
+
+                actionCell.appendChild(clockButton);
+
+            }
+
+        }
+
 
         row.append(
             competitionCell,
@@ -400,7 +393,7 @@ if (match.status === 'Live' && match.clock_period !== 'Full-Time') {
 
 
 // ===================================
-// 7. EDIT MATCH
+// 6. EDIT MATCH
 // ===================================
 
 function editMatch(match) {
@@ -411,7 +404,8 @@ function editMatch(match) {
 
     homeClub.value = match.home_club_name || '';
 
-awayClub.value = match.away_club_name || '';
+    awayClub.value = match.away_club_name || '';
+
     if (match.match_date) {
 
         const date = new Date(match.match_date);
@@ -445,7 +439,7 @@ awayClub.value = match.away_club_name || '';
 
 
 // ===================================
-// 8. SEARCH MATCHES
+// 7. SEARCH MATCHES
 // ===================================
 
 searchMatch.addEventListener('input', function() {
@@ -456,7 +450,7 @@ searchMatch.addEventListener('input', function() {
 
 
 // ===================================
-// 9. START MATCH MANAGEMENT
+// 8. START MATCH MANAGEMENT
 // ===================================
 
 async function startMatchManagement() {
@@ -467,12 +461,13 @@ async function startMatchManagement() {
         return;
     }
 
-   await loadMatches();
+    await loadMatches();
 
 }
 
+
 // ===================================
-// BSN MATCH CLOCK ACTIONS
+// 9. BSN MATCH CLOCK ACTIONS
 // ===================================
 
 async function controlMatchClock(match, action) {
@@ -507,14 +502,15 @@ async function controlMatchClock(match, action) {
 
     else if (action === 'resume') {
 
-    updates = {
-        clock_status: 'running',
-        clock_started_at: new Date().toISOString(),
-        clock_seconds: 2700,
-        clock_period: 'Second Half'
-    };
+        updates = {
+            clock_status: 'running',
+            clock_started_at: new Date().toISOString(),
+            clock_seconds: 2700,
+            clock_period: 'Second Half'
+        };
 
-}
+    }
+
     else if (action === 'fulltime') {
 
         const elapsed = Math.floor(
@@ -539,6 +535,7 @@ async function controlMatchClock(match, action) {
 
 }
 
+
 async function updateMatchClock(matchId, updates) {
 
     const { error } = await supabase
@@ -547,127 +544,131 @@ async function updateMatchClock(matchId, updates) {
         .eq('id', matchId);
 
     if (error) {
+
         alert('Clock update failed: ' + error.message);
+
         console.error(error);
+
         return false;
     }
 
     await loadMatches(searchMatch.value);
 
     return true;
+
 }
-startMatchManagement();
+
 
 // ===================================
-// MANAGE MATCH EVENTS
+// 10. MANAGE MATCH EVENTS
 // ===================================
 
 async function manageMatchEvents(match) {
 
     const eventChoice = prompt(
-    'Select event type:\n' +
-    '1. Goal\n' +
-    '2. Yellow Card\n' +
-    '3. Red Card\n' +
-    '4. Substitution'
-);
-
-const eventTypes = {
-    '1': 'Goal',
-    '2': 'Yellow Card',
-    '3': 'Red Card',
-    '4': 'Substitution'
-};
-
-const eventType = eventTypes[eventChoice];
-
-if (!eventType) {
-    alert('Invalid event type selected.');
-    return;
-}
-
-    if (!eventType) {
-        return;
-    }
-let playerName = '';
-let relatedPlayer = '';
-
-if (eventType === 'Substitution') {
-
-    playerName = prompt('Enter the name of the player coming OFF:');
-
-    if (!playerName) {
-        return;
-    }
-
-    relatedPlayer = prompt('Enter the name of the player coming ON:');
-
-    if (!relatedPlayer) {
-        return;
-    }
-
-} else {
-
-    playerName = prompt('Enter player name:');
-
-    if (!playerName) {
-        return;
-    }
-
-}
-
-if (!playerName) {
-    return;
-}
-
-const eventMinute = prompt('Enter match minute (e.g. 23):');
-
-if (!eventMinute || isNaN(eventMinute)) {
-    return;
-}
-
-const teamName = prompt(
-    'Enter team name:\n' +
-    '1. ' + match.home_club_name + '\n' +
-    '2. ' + match.away_club_name
-);
-
-if (
-    teamName !== match.home_club_name &&
-    teamName !== match.away_club_name
-) {
-    alert('Please enter a valid team name.');
-    return;
-}
-
-const { error } = await supabase
-    .from('match_events')
-    .insert([
-        {
-            match_id: match.id,
-            event_type: eventType,
-            player_name: playerName,
-            related_player: relatedPlayer,
-            event_minute: Number(eventMinute),
-            team_name: teamName
-        }
-    ]);
-
-if (error) {
-    alert('Failed to save event: ' + error.message);
-    console.error(error);
-    return;
-}
-
-alert('Match event saved successfully!');
-    alert('Event selected for ' +
-        match.home_club_name +
-        ' vs ' +
-        match.away_club_name
+        'Select event type:\n' +
+        '1. Goal\n' +
+        '2. Yellow Card\n' +
+        '3. Red Card\n' +
+        '4. Substitution'
     );
 
+    const eventTypes = {
+        '1': 'Goal',
+        '2': 'Yellow Card',
+        '3': 'Red Card',
+        '4': 'Substitution'
+    };
+
+    const eventType = eventTypes[eventChoice];
+
+    if (!eventType) {
+        alert('Invalid event type selected.');
+        return;
+    }
+
+    let playerName = '';
+    let relatedPlayer = '';
+
+    if (eventType === 'Substitution') {
+
+        playerName = prompt('Enter the name of the player coming OFF:');
+
+        if (!playerName) return;
+
+        relatedPlayer = prompt('Enter the name of the player coming ON:');
+
+        if (!relatedPlayer) return;
+
+    } else {
+
+        playerName = prompt('Enter player name:');
+
+        if (!playerName) return;
+
+    }
+
+    const eventMinute = prompt('Enter match minute (e.g. 23):');
+
+    if (eventMinute === null || eventMinute.trim() === '' || isNaN(eventMinute)) {
+        alert('Invalid match minute.');
+        return;
+    }
+
+    const teamChoice = prompt(
+        'Select team:\n' +
+        '1. ' + match.home_club_name + '\n' +
+        '2. ' + match.away_club_name
+    );
+
+    let teamName;
+
+    if (teamChoice === '1') {
+
+        teamName = match.home_club_name;
+
+    } else if (teamChoice === '2') {
+
+        teamName = match.away_club_name;
+
+    } else {
+
+        alert('Invalid team selected.');
+        return;
+
+    }
+
+    const { error } = await supabase.rpc(
+        'record_match_event',
+        {
+            p_match_id: match.id,
+            p_event_type: eventType,
+            p_player_name: playerName,
+            p_related_player: relatedPlayer,
+            p_event_minute: Number(eventMinute),
+            p_team_name: teamName
+        }
+    );
+
+    if (error) {
+
+        alert('Failed to save event: ' + error.message);
+
+        console.error(error);
+
+        return;
+    }
+
+    alert('Match event saved successfully!');
+
+    await loadMatches(searchMatch.value);
+
 }
 
+
+// ===================================
+// 11. VIEW, EDIT AND DELETE MATCH EVENTS
+// ===================================
 
 async function viewMatchEvents(match) {
 
@@ -687,110 +688,175 @@ async function viewMatchEvents(match) {
         return;
     }
 
-    let message = 'MATCH EVENTS\n\n';
+    let eventList = '';
 
     events.forEach(function(event, index) {
-        message +=
+        eventList +=
             (index + 1) + '. ' +
-            event.event_minute + "' - " +
             event.event_type + ' - ' +
-            event.player_name + '\n';
+            event.player_name + ' (' +
+            event.team_name + ') - ' +
+            event.event_minute + "'\n";
     });
 
-    const choice = prompt(
-        message +
+    const eventChoice = prompt(
+        'MATCH EVENTS\n\n' +
+        eventList +
         '\nEnter the event number to manage:'
     );
 
-    if (!choice) return;
+    if (eventChoice === null) {
+        return;
+    }
 
-    const selectedEvent = events[Number(choice) - 1];
+    const selectedIndex = Number(eventChoice) - 1;
 
-    if (!selectedEvent) {
+    if (
+        !Number.isInteger(selectedIndex) ||
+        selectedIndex < 0 ||
+        selectedIndex >= events.length
+    ) {
         alert('Invalid event number.');
         return;
     }
 
+    const selectedEvent = events[selectedIndex];
+
     const action = prompt(
-        'Choose an action:\n' +
+        'Choose an action:\n\n' +
         '1. Edit Event\n' +
         '2. Delete Event'
     );
 
-    if (action === '2') {
-
-        const confirmed = confirm(
-            'Are you sure you want to delete this event?'
-        );
-
-        if (!confirmed) return;
-
-        const { error: deleteError } = await supabase
-            .from('match_events')
-            .delete()
-            .eq('id', selectedEvent.id)
-            .eq('match_id', match.id);
-
-        if (deleteError) {
-            alert('Delete failed: ' + deleteError.message);
-            return;
-        }
-
-        alert('Match event deleted successfully!');
+    if (action === null) {
         return;
     }
 
+    // DELETE EVENT
+    if (action === '2') {
+
+        const confirmDelete = confirm(
+            'Are you sure you want to delete this event?'
+        );
+
+        if (!confirmDelete) {
+            return;
+        }
+
+        const { error: deleteError } = await supabase.rpc(
+            'delete_match_event',
+            {
+                p_event_id: selectedEvent.id,
+                p_match_id: match.id
+            }
+        );
+
+        if (deleteError) {
+            alert('Unable to delete event: ' + deleteError.message);
+            return;
+        }
+
+        alert('Event deleted successfully.');
+
+        await loadMatches(searchMatch.value);
+
+        return;
+    }
+
+    // EDIT EVENT
     if (action === '1') {
+
+        const eventTypeChoice = prompt(
+            'Select event type:\n\n' +
+            '1. Goal\n' +
+            '2. Yellow Card\n' +
+            '3. Red Card\n' +
+            '4. Substitution',
+            selectedEvent.event_type
+        );
+
+        if (eventTypeChoice === null) {
+            return;
+        }
+
+        const eventTypes = {
+            '1': 'Goal',
+            '2': 'Yellow Card',
+            '3': 'Red Card',
+            '4': 'Substitution'
+        };
+
+        const eventType = eventTypes[eventTypeChoice];
+
+        if (!eventType) {
+            alert('Invalid event type.');
+            return;
+        }
 
         const playerName = prompt(
             'Enter player name:',
             selectedEvent.player_name || ''
         );
 
-        if (!playerName) return;
+        if (playerName === null || playerName.trim() === '') {
+            return;
+        }
 
         const eventMinute = prompt(
-            'Enter match minute:',
+            'Enter event minute:',
             selectedEvent.event_minute
         );
 
-        if (!eventMinute || isNaN(eventMinute)) {
-            alert('Invalid match minute.');
+        if (eventMinute === null) {
             return;
         }
 
-        const { error: updateError } = await supabase
-            .from('match_events')
-            .update({
-                player_name: playerName,
-                event_minute: Number(eventMinute)
-            })
-            .eq('id', selectedEvent.id)
-            .eq('match_id', match.id);
+        if (
+            eventMinute.trim() === '' ||
+            !Number.isInteger(Number(eventMinute)) ||
+            Number(eventMinute) < 0
+        ) {
+            alert('Enter a valid event minute.');
+            return;
+        }
+
+        const teamName = prompt(
+            'Enter team name:',
+            selectedEvent.team_name || ''
+        );
+
+        if (teamName === null || teamName.trim() === '') {
+            return;
+        }
+
+        const { error: updateError } = await supabase.rpc(
+            'update_match_event',
+            {
+                p_event_id: selectedEvent.id,
+                p_match_id: match.id,
+                p_event_type: eventType,
+                p_player_name: playerName.trim(),
+                p_event_minute: Number(eventMinute),
+                p_team_name: teamName.trim()
+            }
+        );
 
         if (updateError) {
-            alert('Update failed: ' + updateError.message);
+            alert('Unable to update event: ' + updateError.message);
             return;
         }
 
-        alert('Match event updated successfully!');
+        alert('Event updated successfully.');
+
+        await loadMatches(searchMatch.value);
+
         return;
     }
 
     alert('Invalid action selected.');
 }
+// ===================================
+// 12. START MATCH MANAGEMENT
+// ===================================
 
-
-    let message = 'MATCH EVENTS\n\n';
-
-    events.forEach(function(event) {
-
-        message +=
-            event.event_minute + "' - " +
-            event.event_type + ' - ' +
-            event.player_name + '\n';
-
-    });
-
-    alert(message);
-}
+startMatchManagement();
