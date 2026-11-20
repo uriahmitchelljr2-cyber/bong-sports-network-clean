@@ -31,6 +31,9 @@ async function loadPublicClubs() {
         if (club.logo_url) {
             const logo = document.createElement('img');
             logo.src = club.logo_url;
+            logo.style.width = '65px';
+logo.style.height = '65px';
+logo.style.objectFit = 'contain';
             logo.alt = club.club_name + ' logo';
             card.appendChild(logo);
         }
