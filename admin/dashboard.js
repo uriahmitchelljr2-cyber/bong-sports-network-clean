@@ -49,3 +49,30 @@ logoutButton.addEventListener('click', async function() {
     window.location.href = 'admin.html';
 
 });
+
+
+// LOAD PENDING COMMENTS COUNT
+async function loadPendingCommentsCount() {
+
+    const counter = document.getElementById('pendingCommentsCount');
+
+    if (!counter) return;
+
+    counter.textContent = 'Loading...';
+
+    const { count, error } = await supabase
+        .from('player_comments')
+        .select('*', { count: 'exact', head: true })
+        .eq('status', 'pending');
+
+    if (error) {
+        console.error('Pending comments error:', error.message);
+        counter.textContent = 'Unable to load count';
+        return;
+    }
+
+    counter.textContent = count + ' comments awaiting approval';
+}
+
+// START COUNTER
+loadPendingCommentsCount();
