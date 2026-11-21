@@ -74,7 +74,7 @@ async function loadMatchReportDetails() {
     container.append(headline, teams, author, date, story);
 
     // LOAD MATCH REPORT PHOTOS
-    
+
 const { data: photos, error: photosError } = await supabase
     .from('match_report_photos')
     .select('*')
@@ -95,14 +95,44 @@ if (photos && photos.length > 0) {
 
     photos.forEach(function(photo) {
 
-        const image = document.createElement('img');
+    const image = document.createElement('img');
 
-        image.src = photo.image_url;
-        image.alt = photo.caption || 'Match action photo';
+    image.src = photo.image_url;
+    image.alt = photo.caption || 'Match action photo';
 
-        gallery.appendChild(image);
+    // OPEN PHOTO LIGHTBOX
+    image.addEventListener('click', function() {
+
+        const lightbox = document.createElement('div');
+        lightbox.className = 'photo-lightbox';
+
+        const largeImage = document.createElement('img');
+        largeImage.src = photo.image_url;
+        largeImage.alt = image.alt;
+
+        const closeButton = document.createElement('button');
+        closeButton.textContent = '×';
+        closeButton.className = 'lightbox-close';
+
+        closeButton.addEventListener('click', function() {
+            lightbox.remove();
+        });
+
+        lightbox.append(largeImage, closeButton);
+
+        document.body.appendChild(lightbox);
+
+        lightbox.addEventListener('click', function(event) {
+            if (event.target === lightbox) {
+                lightbox.remove();
+            }
+        });
 
     });
+
+    gallery.appendChild(image);
+
+});
 
     container.append(galleryTitle, gallery);
 }
