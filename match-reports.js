@@ -53,7 +53,15 @@ async function loadMatchReports() {
         card.className = 'news-card';
 
         const headline = document.createElement('h3');
-        headline.textContent = item.headline;
+
+const headlineLink = document.createElement('a');
+
+headlineLink.textContent = item.headline;
+
+headlineLink.href =
+    'match-report-details.html?id=' + item.id;
+
+headline.appendChild(headlineLink);
 
         const teams = document.createElement('p');
 
