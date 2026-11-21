@@ -1331,3 +1331,27 @@ footer p {
     font-size: 30px;
     cursor: pointer;
 }
+
+/* LIGHTBOX PHOTO NAVIGATION */
+.lightbox-previous,
+.lightbox-next {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(255, 255, 255, 0.9);
+    color: black;
+    border: none;
+    border-radius: 50%;
+    width: 45px;
+    height: 45px;
+    font-size: 22px;
+    cursor: pointer;
+}
+
+.lightbox-previous {
+    left: 20px;
+}
+
+.lightbox-next {
+    right: 20px;
+}

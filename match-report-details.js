@@ -93,12 +93,13 @@ if (photos && photos.length > 0) {
     const gallery = document.createElement('div');
     gallery.className = 'match-report-gallery';
 
-    photos.forEach(function(photo) {
+    photos.forEach(function(photo, index) {
 
     const image = document.createElement('img');
 
     image.src = photo.image_url;
     image.alt = photo.caption || 'Match action photo';
+let currentIndex = index;
 
     // OPEN PHOTO LIGHTBOX
     image.addEventListener('click', function() {
@@ -110,6 +111,33 @@ if (photos && photos.length > 0) {
         largeImage.src = photo.image_url;
         largeImage.alt = image.alt;
 
+        function showPhoto() {
+    largeImage.src = photos[currentIndex].image_url;
+    largeImage.alt = photos[currentIndex].caption || 'Match action photo';
+}
+const previousButton = document.createElement('button');
+previousButton.textContent = '❮';
+previousButton.className = 'lightbox-previous';
+
+const nextButton = document.createElement('button');
+nextButton.textContent = '❯';
+nextButton.className = 'lightbox-next';
+
+previousButton.addEventListener('click', function(event) {
+    event.stopPropagation();
+
+    currentIndex = (currentIndex - 1 + photos.length) % photos.length;
+
+    showPhoto();
+});
+
+nextButton.addEventListener('click', function(event) {
+    event.stopPropagation();
+
+    currentIndex = (currentIndex + 1) % photos.length;
+
+    showPhoto();
+});
         const closeButton = document.createElement('button');
         closeButton.textContent = '×';
         closeButton.className = 'lightbox-close';
@@ -118,7 +146,12 @@ if (photos && photos.length > 0) {
             lightbox.remove();
         });
 
-        lightbox.append(largeImage, closeButton);
+        lightbox.append(
+    largeImage,
+    previousButton,
+    nextButton,
+    closeButton
+);
 
         document.body.appendChild(lightbox);
 
