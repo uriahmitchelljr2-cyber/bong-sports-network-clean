@@ -113,3 +113,50 @@ button:hover {
         padding: 20px;
     }
 }
+
+
+/* MATCH REPORTS FORM */
+
+#matchReportForm {
+    max-width: 850px;
+    background: white;
+    padding: 25px;
+    border-radius: 10px;
+    box-shadow: 0 3px 12px rgba(0, 0, 0, 0.08);
+}
+
+#matchReportForm label {
+    display: block;
+    margin: 18px 0 8px;
+    font-weight: bold;
+}
+
+#matchReportForm input,
+#matchReportForm textarea {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 15px;
+    font-family: Arial, sans-serif;
+}
+
+#matchReportForm textarea {
+    resize: vertical;
+    line-height: 1.6;
+}
+
+#matchReportForm button {
+    margin-top: 20px;
+    padding: 13px 22px;
+    background: #08733c;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 15px;
+}
+
+#matchReportForm button:hover {
+    background: #065c30;
+}

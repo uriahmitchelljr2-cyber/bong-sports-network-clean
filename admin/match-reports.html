@@ -1,0 +1,75 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Match Reports | Bong Sports Network</title>
+
+    <link rel="stylesheet" href="dashboard.css">
+</head>
+
+<body>
+
+    <header>
+        <h1>Bong Sports Network</h1>
+        <p>Match Reports Management</p>
+    </header>
+
+    <div class="dashboard-container">
+
+        <aside class="sidebar">
+
+            <h3>MAIN MENU</h3>
+
+            <a href="dashboard.html">Dashboard</a>
+            <a href="players.html">Player Management</a>
+            <a href="clubs.html">Club Management</a>
+            <a href="matches.html">Fixtures & Results</a>
+            <a href="match-reports.html">Match Reports</a>
+            <a href="news.html">News Management</a>
+            <a href="comments.html">Comments Management</a>
+            <a href="statistics.html">Player Statistics</a>
+
+        </aside>
+
+        <main class="main-content">
+
+            <h2>Create Match Report</h2>
+
+            <form id="matchReportForm">
+
+    <label for="matchId">Select Match</label>
+    <select id="matchId" required>
+        <option value="">Loading matches...</option>
+    </select>
+
+    <label for="matchTitle">Report Headline</label>
+    <input
+        type="text"
+        id="matchTitle"
+        placeholder="Enter report headline"
+        required
+    >
+
+    <label for="matchSummary">Match Report</label>
+    <textarea
+        id="matchSummary"
+        rows="12"
+        placeholder="Write the full match report..."
+        required
+    ></textarea>
+
+    <button type="submit">Publish Match Report</button>
+
+</form>
+            <p id="reportMessage"></p>
+
+        </main>
+
+    </div>
+<script type="module" src="match-reports.js"></script>
+</body>
+</html>
