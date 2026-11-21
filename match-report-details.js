@@ -72,6 +72,40 @@ async function loadMatchReportDetails() {
         new Date(report.created_at).toLocaleDateString();
 
     container.append(headline, teams, author, date, story);
+
+    // LOAD MATCH REPORT PHOTOS
+    
+const { data: photos, error: photosError } = await supabase
+    .from('match_report_photos')
+    .select('*')
+    .eq('report_id', reportId)
+    .order('created_at', { ascending: true });
+
+if (photosError) {
+    console.error('Photo loading error:', photosError.message);
+}
+
+if (photos && photos.length > 0) {
+
+    const galleryTitle = document.createElement('h3');
+    galleryTitle.textContent = 'Match Photos';
+
+    const gallery = document.createElement('div');
+    gallery.className = 'match-report-gallery';
+
+    photos.forEach(function(photo) {
+
+        const image = document.createElement('img');
+
+        image.src = photo.image_url;
+        image.alt = photo.caption || 'Match action photo';
+
+        gallery.appendChild(image);
+
+    });
+
+    container.append(galleryTitle, gallery);
+}
 }
 
 // START

@@ -76,14 +76,16 @@ reportForm.addEventListener('submit', async function(event) {
     const headline = document.getElementById('matchTitle').value.trim();
     const report = document.getElementById('matchSummary').value.trim();
 
-    const { error } = await supabase
-        .from('match_reports')
-        .insert({
-            match_id: matchId,
-            headline: headline,
-            report: report,
-            author: userData.user.email || 'BSN Admin'
-        });
+   const { data: savedReport, error } = await supabase
+    .from('match_reports')
+    .insert({
+        match_id: matchId,
+        headline: headline,
+        report: report,
+        author: userData.user.email || 'BSN Admin'
+    })
+    .select('id')
+    .single();
 
     if (error) {
         console.error('Report publishing error:', error.message);
@@ -91,6 +93,47 @@ reportForm.addEventListener('submit', async function(event) {
             'Unable to publish report. Check administrator permissions.';
         return;
     }
+
+    // UPLOAD MATCH REPORT PHOTOS
+const photoInput = document.getElementById('reportPhotos');
+const selectedPhotos = photoInput.files;
+
+for (const photo of selectedPhotos) {
+
+    const fileName =
+        Date.now() + '-' + photo.name.replace(/[^a-zA-Z0-9.-]/g, '_');
+
+    const { error: uploadError } = await supabase
+        .storage
+        .from('match-report-photos')
+        .upload(fileName, photo);
+
+    if (uploadError) {
+        console.error('Photo upload error:', uploadError.message);
+        reportMessage.textContent =
+            'Report saved, but a photo could not be uploaded.';
+        return;
+    }
+
+    const { data: publicUrlData } = supabase
+        .storage
+        .from('match-report-photos')
+        .getPublicUrl(fileName);
+
+    const { error: photoError } = await supabase
+        .from('match_report_photos')
+        .insert({
+            report_id: savedReport.id,
+            image_url: publicUrlData.publicUrl
+        });
+
+    if (photoError) {
+        console.error('Photo record error:', photoError.message);
+        reportMessage.textContent =
+            'Report saved, but a photo record could not be saved.';
+        return;
+    }
+}
 
     reportMessage.textContent = 'Match report published successfully!';
 
