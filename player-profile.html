@@ -29,6 +29,41 @@
         <div id="playerProfile">
             <p>Loading player profile...</p>
         </div>
+<!-- PLAYER COMMENTS -->
+<section class="section" id="player-comments">
+
+    <h2>Player Comments</h2>
+
+    <form id="commentForm">
+
+        <input
+            type="text"
+            id="commenterName"
+            placeholder="Your name"
+            maxlength="50"
+            required
+        >
+
+        <textarea
+            id="playerComment"
+            placeholder="Write your comment about this player..."
+            maxlength="1000"
+            required
+        ></textarea>
+
+        <button type="submit" class="btn">
+            Submit Comment
+        </button>
+
+    </form>
+
+    <p id="commentMessage"></p>
+
+    <div id="commentsContainer">
+        <p>Loading comments...</p>
+    </div>
+
+</section>
 
     </main>
 

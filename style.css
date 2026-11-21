@@ -1206,3 +1206,66 @@ footer p {
     font-weight: 500;
     color: #333;
 }
+
+/* PLAYER COMMENTS */
+
+#player-comments {
+    background: #f0f5f1;
+}
+
+#commentForm {
+    max-width: 650px;
+    margin: 25px auto;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+#commenterName,
+#playerComment {
+    width: 100%;
+    padding: 14px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 15px;
+    font-family: Arial, sans-serif;
+}
+
+#playerComment {
+    min-height: 130px;
+    resize: vertical;
+}
+
+#commentForm button {
+    cursor: pointer;
+    border: none;
+}
+
+#commentsContainer {
+    max-width: 800px;
+    margin: 30px auto;
+    text-align: left;
+}
+
+.comment-card {
+    background: white;
+    padding: 18px;
+    margin-bottom: 15px;
+    border-radius: 10px;
+    border-left: 4px solid #08733c;
+    box-shadow: 0 3px 12px rgba(0, 0, 0, 0.08);
+}
+
+.comment-card h4 {
+    color: #063b20;
+    margin-bottom: 8px;
+}
+
+.comment-card p {
+    line-height: 1.6;
+    overflow-wrap: anywhere;
+}
+
+.comment-card small {
+    color: #777;
+}

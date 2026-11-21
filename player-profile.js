@@ -60,3 +60,90 @@ async function loadPlayerProfile() {
 }
 
 loadPlayerProfile();
+
+// LOAD APPROVED PLAYER COMMENTS
+async function loadPlayerComments() {
+
+    const commentsContainer = document.getElementById('commentsContainer');
+
+    commentsContainer.textContent = 'Loading comments...';
+
+    const { data, error } = await supabase
+        .from('player_comments')
+        .select('*')
+        .eq('player_id', playerId)
+        .eq('status', 'approved')
+        .order('created_at', { ascending: false });
+
+    if (error) {
+        commentsContainer.textContent = 'Unable to load comments.';
+        console.error(error.message);
+        return;
+    }
+
+    commentsContainer.innerHTML = '';
+
+    if (!data || data.length === 0) {
+        commentsContainer.textContent = 'No approved comments yet.';
+        return;
+    }
+
+    data.forEach(function(item) {
+
+        const commentCard = document.createElement('div');
+        commentCard.className = 'comment-card';
+
+        const name = document.createElement('h4');
+        name.textContent = item.commenter_name;
+
+        const comment = document.createElement('p');
+        comment.textContent = item.comment;
+
+        const date = document.createElement('small');
+        date.textContent = new Date(item.created_at).toLocaleDateString();
+
+        commentCard.append(name, comment, date);
+
+        commentsContainer.appendChild(commentCard);
+    });
+}
+
+
+// SUBMIT PLAYER COMMENT
+const commentForm = document.getElementById('commentForm');
+
+commentForm.addEventListener('submit', async function(event) {
+
+    event.preventDefault();
+
+    const commenterName = document.getElementById('commenterName').value.trim();
+    const playerComment = document.getElementById('playerComment').value.trim();
+    const commentMessage = document.getElementById('commentMessage');
+
+    if (!commenterName || !playerComment) {
+        commentMessage.textContent = 'Please complete all fields.';
+        return;
+    }
+
+    const { error } = await supabase
+        .from('player_comments')
+        .insert({
+            player_id: playerId,
+            commenter_name: commenterName,
+            comment: playerComment
+        });
+
+    if (error) {
+        commentMessage.textContent = 'Unable to submit comment. Please try again.';
+        console.error(error.message);
+        return;
+    }
+
+    commentMessage.textContent = 'Your comment was submitted and is awaiting approval.';
+
+    commentForm.reset();
+});
+
+
+// LOAD COMMENTS
+loadPlayerComments();

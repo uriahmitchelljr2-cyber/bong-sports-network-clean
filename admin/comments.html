@@ -1,0 +1,75 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Player Comments - Bong Sports Network</title>
+    <link rel="stylesheet" href="../style.css">
+    <style>
+        .comments-admin {
+            max-width: 1100px;
+            margin: 40px auto;
+            padding: 20px;
+        }
+
+        .admin-comment-card {
+            background: white;
+            padding: 20px;
+            margin-bottom: 18px;
+            border-radius: 10px;
+            border-left: 4px solid #08733c;
+            box-shadow: 0 3px 12px rgba(0,0,0,0.08);
+        }
+
+        .admin-comment-card p {
+            margin: 12px 0;
+        }
+
+        .comment-actions button {
+            padding: 9px 15px;
+            margin: 5px 5px 0 0;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            color: white;
+        }
+
+        .approve-btn {
+            background: #08733c;
+        }
+
+        .reject-btn {
+            background: #b45309;
+        }
+
+        .delete-btn {
+            background: #b91c1c;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="logo">
+            <h2>BONG SPORTS NETWORK</h2>
+            <p>Admin Comments Management</p>
+        </div>
+        <nav>
+            <a href="dashboard.html">Dashboard</a>
+            <a href="matches.html">Matches</a>
+        </nav>
+    </header>
+
+    <main class="comments-admin">
+        <h2>Player Comments Management</h2>
+
+        <div id="adminCommentsContainer">
+            <p>Loading comments...</p>
+        </div>
+    </main>
+
+    <script type="module" src="comments.js"></script>
+
+</body>
+</html>

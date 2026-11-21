@@ -76,7 +76,7 @@ loadNews();
 async function loadClubs() {
 
     const clubsContainer = document.getElementById('clubsContainer');
-
+if (!clubsContainer) return;
     clubsContainer.innerHTML = '<p>Loading clubs...</p>';
 
     const { data, error } = await supabase
@@ -200,9 +200,8 @@ loadPlayers();
 // LOAD PLAYER STATISTICS
 async function loadStatistics() {
 
-    const statisticsContainer =
-        document.getElementById('statisticsContainer');
-
+    const statisticsContainer = document.getElementById('statisticsContainer');
+if (!statisticsContainer) return;
     statisticsContainer.innerHTML =
         '<p>Loading player statistics...</p>';
 
