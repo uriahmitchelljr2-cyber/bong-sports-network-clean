@@ -52,41 +52,6 @@ async function checkAdmin() {
     return true;
 }
 
-
-// ===================================
-// 3. LOAD PLAYERS INTO DROPDOWN
-// ===================================
-
-async function loadPlayers() {
-
-    const { data, error } = await supabase
-        .from('players')
-        .select('id, full_name')
-        .order('full_name');
-
-    if (error) {
-        console.error('Error loading players:', error.message);
-        statisticsMessage.textContent = 'Unable to load players.';
-        return;
-    }
-
-    playerSelect.innerHTML =
-        '<option value="">Select Player</option>';
-
-    data.forEach(function(player) {
-
-        const option = document.createElement('option');
-
-        option.value = player.id;
-
-        option.textContent = player.full_name;
-
-        playerSelect.appendChild(option);
-
-    });
-}
-
-
 // ===================================
 // 4. RESET STATISTICS FORM
 // ===================================
@@ -112,15 +77,16 @@ function resetStatisticsForm() {
 statisticsForm.addEventListener('submit', async function(event) {
 
     event.preventDefault();
+const playerName = playerSelect.value.trim();
 
-    if (!playerSelect.value) {
-        statisticsMessage.textContent = 'Please select a player.';
-        return;
-    }
+if (!playerName) {
+    statisticsMessage.textContent = 'Please enter a player name.';
+    return;
+}
 
     const statisticsData = {
 
-        player_id: Number(playerSelect.value),
+        player_name: playerName,
 
         season: season.value.trim(),
 
@@ -188,19 +154,16 @@ async function loadStatistics(search = '') {
 
     let query = supabase
         .from('player_statistics')
-        .select(`
-            id,
-            player_id,
-            season,
-            appearances,
-            goals,
-            assists,
-            yellow_cards,
-            red_cards,
-            players (
-                full_name
-            )
-        `)
+       .select(`
+    id,
+    player_name,
+    season,
+    appearances,
+    goals,
+    assists,
+    yellow_cards,
+    red_cards
+`)
         .order('season', { ascending: false });
 
     const { data, error } = await query;
@@ -219,10 +182,7 @@ async function loadStatistics(search = '') {
 
     const filteredData = data.filter(function(stat) {
 
-        const playerName = stat.players
-            ? stat.players.full_name.toLowerCase()
-            : '';
-
+        const playerName = (stat.player_name || '').toLowerCase();
         return playerName.includes(search.trim().toLowerCase());
 
     });
@@ -240,7 +200,7 @@ async function loadStatistics(search = '') {
         const row = document.createElement('tr');
 
         const values = [
-            stat.players ? stat.players.full_name : 'Unknown Player',
+            stat.player_name || 'Unknown Player',
             stat.season || '',
             stat.appearances ?? 0,
             stat.goals ?? 0,
@@ -329,7 +289,7 @@ function editStatistics(stat) {
 
     editingStatisticsId = stat.id;
 
-    playerSelect.value = String(stat.player_id);
+  playerSelect.value = stat.player_name || '';
 
     season.value = stat.season || '';
 
@@ -389,8 +349,6 @@ async function startStatisticsManagement() {
     if (!authorized) {
         return;
     }
-
-    await loadPlayers();
 
     await loadStatistics();
 
