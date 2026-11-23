@@ -172,17 +172,17 @@ async function loadStatistics(search = '') {
     const { data, error } = await supabase
         .from('player_statistics')
         .select(`
-            id,
-            player_name,
-            club_id,
-            season,
-            appearances,
-            goals,
-            clubs (
-                club_name,
-                logo_url
-            )
-        `)
+    id,
+    player_name,
+    club_id,
+    season,
+    appearances,
+    goals,
+    clubs (
+        club_name,
+        logo_url
+    )
+`)
         .order('season', { ascending: false });
 
     if (error) {
