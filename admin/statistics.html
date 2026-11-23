@@ -37,8 +37,7 @@
                 <h3>Record Player Statistics</h3>
 
                 <form id="statisticsForm">
-
-                    <div class="form-group">
+<div class="form-group">
     <label for="player">Player Name</label>
     <input
         type="text"
@@ -48,71 +47,44 @@
     >
 </div>
 
-                    <div class="form-group">
-                        <label for="season">Season</label>
-                        <input
-                            type="text"
-                            id="season"
-                            placeholder="Example: 2026"
-                            required
-                        >
-                    </div>
+<div class="form-group">
+    <label for="club">Club Team</label>
+    <select id="club" required>
+        <option value="">Select Club</option>
+    </select>
+</div>
 
-                    <div class="form-group">
-                        <label for="appearances">Appearances</label>
-                        <input
-                            type="number"
-                            id="appearances"
-                            min="0"
-                            value="0"
-                            required
-                        >
-                    </div>
+<div class="form-group">
+    <label for="season">Season</label>
+    <input
+        type="text"
+        id="season"
+        placeholder="Example: 2026"
+        required
+    >
+</div>
 
-                    <div class="form-group">
-                        <label for="goals">Goals</label>
-                        <input
-                            type="number"
-                            id="goals"
-                            min="0"
-                            value="0"
-                            required
-                        >
-                    </div>
+<div class="form-group">
+    <label for="appearances">Appearances</label>
+    <input
+        type="number"
+        id="appearances"
+        min="0"
+        value="0"
+        required
+    >
+</div>
 
-                    <div class="form-group">
-                        <label for="assists">Assists</label>
-                        <input
-                            type="number"
-                            id="assists"
-                            min="0"
-                            value="0"
-                            required
-                        >
-                    </div>
-
-                    <div class="form-group">
-                        <label for="yellowCards">Yellow Cards</label>
-                        <input
-                            type="number"
-                            id="yellowCards"
-                            min="0"
-                            value="0"
-                            required
-                        >
-                    </div>
-
-                    <div class="form-group">
-                        <label for="redCards">Red Cards</label>
-                        <input
-                            type="number"
-                            id="redCards"
-                            min="0"
-                            value="0"
-                            required
-                        >
-                    </div>
-
+<div class="form-group">
+    <label for="goals">Goals</label>
+    <input
+        type="number"
+        id="goals"
+        min="0"
+        value="0"
+        required
+    >
+</div>
                     <button type="submit" id="submitButton">
                         Save Statistics
                     </button>
@@ -144,17 +116,16 @@
 
                     <table>
                         <thead>
-                            <tr>
-                                <th>Player</th>
-                                <th>Season</th>
-                                <th>Apps</th>
-                                <th>Goals</th>
-                                <th>Assists</th>
-                                <th>Yellow</th>
-                                <th>Red</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
+    <tr>
+        <th>Player</th>
+        <th>Club Team</th>
+        <th>Club Logo</th>
+        <th>Season</th>
+        <th>Apps</th>
+        <th>Goals</th>
+        <th>Actions</th>
+    </tr>
+</thead>
 
                         <tbody id="statisticsTable"></tbody>
                     </table>

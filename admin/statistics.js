@@ -10,12 +10,10 @@ const statisticsTable = document.getElementById('statisticsTable');
 const searchStatistics = document.getElementById('searchStatistics');
 
 const playerSelect = document.getElementById('player');
+const clubSelect = document.getElementById('club');
 const season = document.getElementById('season');
 const appearances = document.getElementById('appearances');
 const goals = document.getElementById('goals');
-const assists = document.getElementById('assists');
-const yellowCards = document.getElementById('yellowCards');
-const redCards = document.getElementById('redCards');
 
 const statisticsMessage = document.getElementById('statisticsMessage');
 const submitButton = document.getElementById('submitButton');
@@ -84,23 +82,19 @@ if (!playerName) {
     return;
 }
 
-    const statisticsData = {
+   const statisticsData = {
 
-        player_name: playerName,
+    player_name: playerName,
 
-        season: season.value.trim(),
+    club_id: Number(clubSelect.value),
 
-        appearances: Number(appearances.value),
+    season: season.value.trim(),
 
-        goals: Number(goals.value),
+    appearances: Number(appearances.value),
 
-        assists: Number(assists.value),
+    goals: Number(goals.value)
 
-        yellow_cards: Number(yellowCards.value),
-
-        red_cards: Number(redCards.value)
-
-    };
+};
 
     statisticsMessage.textContent = 'Saving statistics...';
 
@@ -150,31 +144,30 @@ if (!playerName) {
 async function loadStatistics(search = '') {
 
     statisticsTable.innerHTML =
-        '<tr><td colspan="8">Loading statistics...</td></tr>';
+        '<tr><td colspan="7">Loading statistics...</td></tr>';
 
-    let query = supabase
+    const { data, error } = await supabase
         .from('player_statistics')
-       .select(`
-    id,
-    player_name,
-    season,
-    appearances,
-    goals,
-    assists,
-    yellow_cards,
-    red_cards
-`)
+        .select(`
+            id,
+            player_name,
+            club_id,
+            season,
+            appearances,
+            goals,
+            clubs (
+                club_name,
+                logo_url
+            )
+        `)
         .order('season', { ascending: false });
-
-    const { data, error } = await query;
 
     if (error) {
 
         statisticsTable.innerHTML =
-            '<tr><td colspan="8">Error loading statistics.</td></tr>';
+            '<tr><td colspan="7">Error loading statistics.</td></tr>';
 
         console.error(error.message);
-
         return;
     }
 
@@ -183,14 +176,18 @@ async function loadStatistics(search = '') {
     const filteredData = data.filter(function(stat) {
 
         const playerName = (stat.player_name || '').toLowerCase();
-        return playerName.includes(search.trim().toLowerCase());
+        const clubName = (stat.clubs?.club_name || '').toLowerCase();
+        const searchText = search.trim().toLowerCase();
+
+        return playerName.includes(searchText) ||
+               clubName.includes(searchText);
 
     });
 
     if (filteredData.length === 0) {
 
         statisticsTable.innerHTML =
-            '<tr><td colspan="8">No statistics found.</td></tr>';
+            '<tr><td colspan="7">No statistics found.</td></tr>';
 
         return;
     }
@@ -199,22 +196,51 @@ async function loadStatistics(search = '') {
 
         const row = document.createElement('tr');
 
+        // Player name
+        const playerCell = document.createElement('td');
+        playerCell.textContent = stat.player_name || 'Unknown Player';
+        row.appendChild(playerCell);
+
+        // Club name
+        const clubCell = document.createElement('td');
+        clubCell.textContent = stat.clubs?.club_name || 'No Club';
+        row.appendChild(clubCell);
+
+        // Club logo
+        const logoCell = document.createElement('td');
+
+        if (stat.clubs?.logo_url) {
+
+            const logo = document.createElement('img');
+
+            logo.src = stat.clubs.logo_url;
+            logo.alt = 'Club Logo';
+
+            logo.style.width = '45px';
+            logo.style.height = '45px';
+            logo.style.objectFit = 'contain';
+
+            logoCell.appendChild(logo);
+
+        } else {
+
+            logoCell.textContent = 'No Logo';
+
+        }
+
+        row.appendChild(logoCell);
+
+        // Remaining statistics
         const values = [
-            stat.player_name || 'Unknown Player',
             stat.season || '',
             stat.appearances ?? 0,
-            stat.goals ?? 0,
-            stat.assists ?? 0,
-            stat.yellow_cards ?? 0,
-            stat.red_cards ?? 0
+            stat.goals ?? 0
         ];
 
         values.forEach(function(value) {
 
             const cell = document.createElement('td');
-
             cell.textContent = value;
-
             row.appendChild(cell);
 
         });
@@ -222,24 +248,19 @@ async function loadStatistics(search = '') {
         const actionCell = document.createElement('td');
 
         // EDIT BUTTON
-
         const editButton = document.createElement('button');
 
         editButton.textContent = 'Edit';
-
         editButton.className = 'action-button edit-button';
 
         editButton.addEventListener('click', function() {
             editStatistics(stat);
         });
 
-
         // DELETE BUTTON
-
         const deleteButton = document.createElement('button');
 
         deleteButton.textContent = 'Delete';
-
         deleteButton.className = 'action-button delete-button';
 
         deleteButton.addEventListener('click', async function() {
@@ -248,9 +269,7 @@ async function loadStatistics(search = '') {
                 'Are you sure you want to delete these statistics?'
             );
 
-            if (!confirmed) {
-                return;
-            }
+            if (!confirmed) return;
 
             const { error: deleteError } = await supabase
                 .from('player_statistics')
@@ -258,9 +277,7 @@ async function loadStatistics(search = '') {
                 .eq('id', stat.id);
 
             if (deleteError) {
-
                 alert('Delete failed: ' + deleteError.message);
-
                 return;
             }
 
@@ -271,7 +288,6 @@ async function loadStatistics(search = '') {
         });
 
         actionCell.append(editButton, deleteButton);
-
         row.appendChild(actionCell);
 
         statisticsTable.appendChild(row);
@@ -279,7 +295,6 @@ async function loadStatistics(search = '') {
     });
 
 }
-
 
 // ===================================
 // 7. EDIT STATISTICS
@@ -289,19 +304,15 @@ function editStatistics(stat) {
 
     editingStatisticsId = stat.id;
 
-  playerSelect.value = stat.player_name || '';
+    playerSelect.value = stat.player_name || '';
+
+    clubSelect.value = stat.club_id || '';
 
     season.value = stat.season || '';
 
     appearances.value = stat.appearances ?? 0;
 
     goals.value = stat.goals ?? 0;
-
-    assists.value = stat.assists ?? 0;
-
-    yellowCards.value = stat.yellow_cards ?? 0;
-
-    redCards.value = stat.red_cards ?? 0;
 
     submitButton.textContent = 'Save Changes';
 
@@ -314,7 +325,6 @@ function editStatistics(stat) {
     });
 
 }
-
 
 // ===================================
 // 8. CANCEL EDITING
@@ -337,6 +347,36 @@ searchStatistics.addEventListener('input', function() {
 
 });
 
+// ===================================
+// LOAD REGISTERED CLUBS
+// ===================================
+
+async function loadClubs() {
+
+    const { data, error } = await supabase
+        .from('clubs')
+        .select('id, club_name, logo_url')
+        .order('club_name', { ascending: true });
+
+    if (error) {
+        console.error('Error loading clubs:', error.message);
+        return;
+    }
+
+    clubSelect.innerHTML = '<option value="">Select Club</option>';
+
+    data.forEach(function(club) {
+
+        const option = document.createElement('option');
+
+        option.value = club.id;
+        option.textContent = club.club_name;
+
+        clubSelect.appendChild(option);
+
+    });
+
+}
 
 // ===================================
 // 10. START STATISTICS MANAGEMENT
@@ -350,7 +390,8 @@ async function startStatisticsManagement() {
         return;
     }
 
-    await loadStatistics();
+    await loadClubs();
+await loadStatistics();
 
 }
 
