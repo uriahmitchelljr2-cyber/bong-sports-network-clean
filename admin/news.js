@@ -180,6 +180,30 @@ newsForm.addEventListener('submit', async function(event) {
         return;
     }
 
+// RECORD NEWS ACTIVITY
+
+const { data: userData } = await supabase.auth.getUser();
+
+if (userData.user) {
+
+    const { error: logError } = await supabase
+        .from('admin_activity_logs')
+        .insert({
+            admin_email: userData.user.email,
+            action: editingNewsId !== null
+                ? 'Updated News'
+                : 'Added News',
+            section: 'Sports News',
+            description: editingNewsId !== null
+                ? 'Updated news article: ' + newsData.title
+                : 'Added news article: ' + newsData.title
+        });
+
+    if (logError) {
+        console.error('Activity log error:', logError.message);
+    }
+}
+
     newsMessage.textContent = editingNewsId !== null
         ? 'News updated successfully!'
         : 'News saved successfully!';
@@ -275,6 +299,27 @@ async function loadNews(search = '') {
                 alert('Delete failed: ' + deleteError.message);
                 return;
             }
+
+            // RECORD NEWS DELETION
+
+const { data: userData } = await supabase.auth.getUser();
+
+if (userData.user) {
+
+    const { error: logError } = await supabase
+        .from('admin_activity_logs')
+        .insert({
+            admin_email: userData.user.email,
+            action: 'Deleted News',
+            section: 'Sports News',
+            description: 'Deleted news article: ' +
+                (news.title || 'Unknown Article')
+        });
+
+    if (logError) {
+        console.error('Activity log error:', logError.message);
+    }
+}
 
             alert('News deleted successfully!');
             await loadNews(searchNews.value);

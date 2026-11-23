@@ -143,6 +143,32 @@ matchForm.addEventListener('submit', async function(event) {
         return;
     }
 
+// RECORD MATCH ACTIVITY
+
+const { data: userData } = await supabase.auth.getUser();
+
+if (userData.user) {
+
+    const { error: logError } = await supabase
+        .from('admin_activity_logs')
+        .insert({
+            admin_email: userData.user.email,
+            action: editingMatchId !== null
+                ? 'Updated Match'
+                : 'Added Match',
+            section: 'Matches',
+            description: editingMatchId !== null
+                ? 'Updated match: ' + matchData.home_club_name +
+                  ' vs ' + matchData.away_club_name
+                : 'Scheduled match: ' + matchData.home_club_name +
+                  ' vs ' + matchData.away_club_name
+        });
+
+    if (logError) {
+        console.error('Activity log error:', logError.message);
+    }
+}
+
     matchMessage.textContent = editingMatchId !== null
         ? 'Match updated successfully!'
         : 'Match scheduled successfully!';
@@ -282,6 +308,28 @@ async function loadMatches(search = '') {
 
                 return;
             }
+
+            // RECORD MATCH DELETION
+
+const { data: userData } = await supabase.auth.getUser();
+
+if (userData.user) {
+
+    const { error: logError } = await supabase
+        .from('admin_activity_logs')
+        .insert({
+            admin_email: userData.user.email,
+            action: 'Deleted Match',
+            section: 'Matches',
+            description: 'Deleted match: ' +
+                match.home_club_name + ' vs ' +
+                match.away_club_name
+        });
+
+    if (logError) {
+        console.error('Activity log error:', logError.message);
+    }
+}
 
             alert('Match deleted successfully!');
 
@@ -659,6 +707,28 @@ async function manageMatchEvents(match) {
         return;
     }
 
+    // RECORD MATCH EVENT ACTIVITY
+
+const { data: userData } = await supabase.auth.getUser();
+
+if (userData.user) {
+
+    const { error: logError } = await supabase
+        .from('admin_activity_logs')
+        .insert({
+            admin_email: userData.user.email,
+            action: 'Added Match Event',
+            section: 'Match Events',
+            description: eventType + ' recorded for ' +
+                playerName + ' (' + teamName + ')' +
+                ' at minute ' + eventMinute
+        });
+
+    if (logError) {
+        console.error('Activity log error:', logError.message);
+    }
+}
+
     alert('Match event saved successfully!');
 
     await loadMatches(searchMatch.value);
@@ -845,6 +915,28 @@ async function viewMatchEvents(match) {
             alert('Unable to update event: ' + updateError.message);
             return;
         }
+
+// RECORD MATCH EVENT DELETION
+
+const { data: userData } = await supabase.auth.getUser();
+
+if (userData.user) {
+
+    const { error: logError } = await supabase
+        .from('admin_activity_logs')
+        .insert({
+            admin_email: userData.user.email,
+            action: 'Deleted Match Event',
+            section: 'Match Events',
+            description: 'Deleted ' +
+                selectedEvent.event_type + ' event for ' +
+                selectedEvent.player_name
+        });
+
+    if (logError) {
+        console.error('Activity log error:', logError.message);
+    }
+}
 
         alert('Event updated successfully.');
 

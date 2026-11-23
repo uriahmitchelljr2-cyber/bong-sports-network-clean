@@ -195,5 +195,69 @@ async function loadRecentActivity() {
 // START RECENT ACTIVITY
 loadRecentActivity();
 
+// LOAD ADMIN ACTIVITY LOGS
+async function loadAdminActivityLogs() {
+
+    const activityTable = document.getElementById('adminActivityTable');
+
+    if (!activityTable) return;
+
+    const { data, error } = await supabase
+        .from('admin_activity_logs')
+        .select('admin_email, action, section, description, created_at')
+        .order('created_at', { ascending: false })
+        .limit(20);
+
+    if (error) {
+
+        console.error('Activity log error:', error.message);
+
+        activityTable.innerHTML =
+            '<tr><td colspan="5">Unable to load activity logs.</td></tr>';
+
+        return;
+    }
+
+    activityTable.innerHTML = '';
+
+    if (!data || data.length === 0) {
+
+        activityTable.innerHTML =
+            '<tr><td colspan="5">No admin activity recorded yet.</td></tr>';
+
+        return;
+    }
+
+    data.forEach(function(item) {
+
+        const row = document.createElement('tr');
+
+        const values = [
+            item.created_at
+                ? new Date(item.created_at).toLocaleString()
+                : 'Unknown date',
+            item.admin_email || 'Unknown Admin',
+            item.action,
+            item.section,
+            item.description || ''
+        ];
+
+        values.forEach(function(value) {
+
+            const cell = document.createElement('td');
+            cell.textContent = value || '';
+            row.appendChild(cell);
+
+        });
+
+        activityTable.appendChild(row);
+
+    });
+
+}
+
+// START ADMIN ACTIVITY LOGS
+loadAdminActivityLogs();
+
 // START COUNTER
 loadPendingCommentsCount();

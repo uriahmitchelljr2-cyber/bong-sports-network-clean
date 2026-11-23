@@ -178,6 +178,7 @@ clubForm.addEventListener('submit', async function(event) {
         if (editingClubId !== null) {
 
             // Only replace logo when a new one is selected
+
             if (uploadedLogoUrl) {
                 clubData.logo_url = uploadedLogoUrl;
             }
@@ -202,6 +203,30 @@ clubForm.addEventListener('submit', async function(event) {
                 .from('clubs')
                 .insert([clubData]);
         }
+
+        // RECORD CLUB ACTIVITY
+
+const { data: userData } = await supabase.auth.getUser();
+
+if (userData.user) {
+
+    const { error: logError } = await supabase
+        .from('admin_activity_logs')
+        .insert({
+    
+            admin_email: userData.user.email,
+            action: editingClubId !== null ? 'Updated Club' : 'Added Club',
+            section: 'Clubs',
+            description: editingClubId !== null
+    ? 'Updated club: ' + clubData.club_name
+    : 'Registered new club: ' + clubData.club_name
+
+        });
+
+    if (logError) {
+        console.error('Activity log error:', logError.message);
+    }
+}
 
         if (result.error) {
             throw result.error;
@@ -318,6 +343,26 @@ async function loadClubs(search = '') {
                 alert('Delete failed: ' + deleteError.message);
                 return;
             }
+
+// RECORD CLUB DELETION
+
+const { data: userData } = await supabase.auth.getUser();
+
+if (userData.user) {
+
+    const { error: logError } = await supabase
+        .from('admin_activity_logs')
+        .insert({
+            admin_email: userData.user.email,
+            action: 'Deleted Club',
+            section: 'Clubs',
+            description: 'Deleted club: ' + (club.club_name || 'Unknown Club')
+        });
+
+    if (logError) {
+        console.error('Activity log error:', logError.message);
+    }
+}
 
             alert('Club deleted successfully!');
 

@@ -125,6 +125,29 @@ if (!playerName) {
         return;
     }
 
+// RECORD STATISTICS ACTIVITY
+const { data: userData } = await supabase.auth.getUser();
+
+if (userData.user) {
+
+    const { error: logError } = await supabase
+        .from('admin_activity_logs')
+        .insert({
+            admin_email: userData.user.email,
+            action: editingStatisticsId !== null
+                ? 'Updated Statistics'
+                : 'Added Statistics',
+            section: 'Statistics',
+            description: editingStatisticsId !== null
+                ? 'Updated player statistics'
+                : 'Added new player statistics'
+        });
+
+    if (logError) {
+        console.error('Activity log error:', logError.message);
+    }
+}
+
     statisticsMessage.textContent =
         editingStatisticsId !== null
             ? 'Statistics updated successfully!'
@@ -280,6 +303,26 @@ async function loadStatistics(search = '') {
                 alert('Delete failed: ' + deleteError.message);
                 return;
             }
+
+            // RECORD STATISTICS DELETION
+const { data: userData } = await supabase.auth.getUser();
+
+if (userData.user) {
+
+    const { error: logError } = await supabase
+        .from('admin_activity_logs')
+        .insert({
+            admin_email: userData.user.email,
+            action: 'Deleted Statistics',
+            section: 'Statistics',
+            description: 'Deleted statistics for player: ' +
+                (stat.player_name || 'Unknown Player')
+        });
+
+    if (logError) {
+        console.error('Activity log error:', logError.message);
+    }
+}
 
             alert('Statistics deleted successfully!');
 

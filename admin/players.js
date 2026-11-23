@@ -265,6 +265,28 @@ playerForm.addEventListener('submit', async function(event) {
             throw result.error;
         }
 
+// RECORD ADMIN ACTIVITY
+
+const { data: userData } = await supabase.auth.getUser();
+
+if (userData.user) {
+
+    const { error: logError } = await supabase
+        .from('admin_activity_logs')
+        .insert({
+            admin_email: userData.user.email,
+            action: isEditing ? 'Updated Player' : 'Added Player',
+            section: 'Players',
+            description: isEditing
+                ? 'Updated an existing player record'
+                : 'Registered a new player'
+        });
+
+    if (logError) {
+        console.error('Activity log error:', logError.message);
+    }
+}
+
         // RESET FORM
 
         resetPlayerForm();
@@ -413,6 +435,26 @@ async function loadPlayers(search = '') {
 
                 return;
             }
+
+            // RECORD PLAYER DELETION
+
+const { data: userData } = await supabase.auth.getUser();
+
+if (userData.user) {
+
+    const { error: logError } = await supabase
+        .from('admin_activity_logs')
+        .insert({
+            admin_email: userData.user.email,
+            action: 'Deleted Player',
+            section: 'Players',
+            description: 'Deleted player: ' + (player.full_name || 'Unknown Player')
+        });
+
+    if (logError) {
+        console.error('Activity log error:', logError.message);
+    }
+}
 
             alert('Player deleted successfully!');
 

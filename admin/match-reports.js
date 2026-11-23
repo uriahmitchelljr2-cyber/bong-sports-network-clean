@@ -94,6 +94,21 @@ reportForm.addEventListener('submit', async function(event) {
         return;
     }
 
+// RECORD MATCH REPORT ACTIVITY
+
+const { error: logError } = await supabase
+    .from('admin_activity_logs')
+    .insert({
+        admin_email: userData.user.email,
+        action: 'Published Match Report',
+        section: 'Match Reports',
+        description: 'Published match report: ' + headline
+    });
+
+if (logError) {
+    console.error('Activity log error:', logError.message);
+}
+
     // UPLOAD MATCH REPORT PHOTOS
 const photoInput = document.getElementById('reportPhotos');
 const selectedPhotos = photoInput.files;
