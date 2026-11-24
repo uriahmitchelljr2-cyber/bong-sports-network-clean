@@ -221,6 +221,63 @@
     background: #bd901c;
 }
 
+.top-scorers-section {
+    background: white;
+    padding: 25px;
+    border-radius: 12px;
+    margin-bottom: 25px;
+    box-shadow: 0 4px 18px rgba(0,0,0,.07);
+}
+
+.top-scorers-heading {
+    margin-bottom: 20px;
+}
+
+.top-scorers-heading h2 {
+    color: #101d35;
+    font-size: 22px;
+    margin-bottom: 8px;
+}
+
+.top-scorers-heading p {
+    color: #667085;
+    font-size: 14px;
+}
+
+.top-scorers-list {
+    display: grid;
+    gap: 12px;
+}
+
+.top-scorer-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px;
+    background: #f8f9fc;
+    border-left: 4px solid #d6a629;
+    border-radius: 8px;
+}
+
+.top-scorer-player {
+    font-weight: bold;
+    color: #101d35;
+}
+
+.top-scorer-club {
+    color: #667085;
+    font-size: 13px;
+    margin-top: 5px;
+}
+
+.top-scorer-goals {
+    background: #101d35;
+    color: white;
+    padding: 8px 13px;
+    border-radius: 20px;
+    font-weight: bold;
+}
+
     </style>
 </head>
 
@@ -254,6 +311,19 @@
     <div class="summary-card">
         <h3>Total Goals</h3>
         <p id="totalGoals">0</p>
+    </div>
+
+</section>
+
+<section class="top-scorers-section">
+
+    <div class="top-scorers-heading">
+        <h2>🏆 Top Scorers</h2>
+        <p>The leading goal scorers in Bong County football.</p>
+    </div>
+
+    <div id="topScorersList" class="top-scorers-list">
+        <p>Loading top scorers...</p>
     </div>
 
 </section>

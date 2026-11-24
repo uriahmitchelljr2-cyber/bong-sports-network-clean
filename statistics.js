@@ -9,6 +9,7 @@ const totalPlayerRecords = document.getElementById('totalPlayerRecords');
 const totalAppearances = document.getElementById('totalAppearances');
 const totalGoals = document.getElementById('totalGoals');
 const downloadStatistics = document.getElementById('downloadStatistics');
+const topScorersList = document.getElementById('topScorersList');
 let allStatisticsData = [];
 
 // LOAD PUBLIC PLAYER STATISTICS
@@ -46,6 +47,7 @@ console.log('Loading statistics function started');
 
     console.log('Statistics data:', data);
     allStatisticsData = data;
+    displayTopScorers(data);
 console.log('Number of statistics:', data?.length);
 
 // UPDATE STATISTICS SUMMARY CARDS
@@ -138,6 +140,49 @@ function displayStatistics(data) {
 
         statisticsTable.appendChild(row);
 
+    });
+}
+
+// DISPLAY TOP SCORERS
+function displayTopScorers(data) {
+
+    topScorersList.innerHTML = '';
+
+    const topScorers = [...data]
+        .filter(stat => Number(stat.goals) > 0)
+        .sort((a, b) => Number(b.goals) - Number(a.goals))
+        .slice(0, 5);
+
+    if (topScorers.length === 0) {
+        topScorersList.textContent = 'No goal records available.';
+        return;
+    }
+
+    topScorers.forEach(function(stat, index) {
+
+        const item = document.createElement('div');
+        item.className = 'top-scorer-item';
+
+        const playerInfo = document.createElement('div');
+
+        const playerName = document.createElement('div');
+        playerName.className = 'top-scorer-player';
+        playerName.textContent = (index + 1) + '. ' +
+            (stat.player_name || 'Unknown Player');
+
+        const clubName = document.createElement('div');
+        clubName.className = 'top-scorer-club';
+        clubName.textContent =
+            stat.clubs?.club_name || 'Unknown Club';
+
+        const goals = document.createElement('div');
+        goals.className = 'top-scorer-goals';
+        goals.textContent = stat.goals + ' Goals';
+
+        playerInfo.append(playerName, clubName);
+        item.append(playerInfo, goals);
+
+        topScorersList.appendChild(item);
     });
 }
 
