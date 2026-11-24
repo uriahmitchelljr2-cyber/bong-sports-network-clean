@@ -9,6 +9,219 @@
     <title>Player Statistics | Bong Sports Network</title>
 
     <link rel="stylesheet" href="style.css">
+
+    <style>
+        /* STATISTICS PAGE */
+
+        .statistics-page {
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 20px;
+        }
+
+        .statistics-heading {
+            background: #101d35;
+            color: white;
+            padding: 35px 25px;
+            border-radius: 12px;
+            margin-bottom: 25px;
+            border-left: 5px solid #d6a629;
+        }
+
+        .statistics-heading h2 {
+            font-size: 30px;
+            margin: 0 0 10px;
+        }
+
+        .statistics-heading p {
+            color: #d5dce8;
+            margin: 0;
+        }
+
+        .statistics-label {
+            color: #e0b43c;
+            font-size: 13px;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        .statistics-card {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 18px rgba(0, 0, 0, 0.07);
+        }
+
+        .statistics-toolbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin-bottom: 22px;
+        }
+
+        .statistics-toolbar h3 {
+            color: #101d35;
+            margin: 0;
+            font-size: 20px;
+        }
+
+        .statistics-search {
+            width: 280px;
+            max-width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #d9dee8;
+            border-radius: 8px;
+            font-size: 14px;
+            outline: none;
+        }
+
+        .statistics-search:focus {
+            border-color: #d6a629;
+            box-shadow: 0 0 0 3px rgba(214, 166, 41, 0.15);
+        }
+
+        .statistics-table-wrapper {
+            width: 100%;
+            overflow-x: auto;
+        }
+
+        .statistics-table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 650px;
+        }
+
+        .statistics-table thead {
+            background: #101d35;
+            color: white;
+        }
+
+        .statistics-table th {
+            padding: 16px 14px;
+            text-align: left;
+            font-size: 13px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            white-space: nowrap;
+        }
+
+        .statistics-table td {
+            padding: 15px 14px;
+            border-bottom: 1px solid #edf0f4;
+            color: #344054;
+            font-size: 14px;
+            vertical-align: middle;
+        }
+
+        .statistics-table tbody tr:nth-child(even) {
+            background: #f8f9fc;
+        }
+
+        .statistics-table tbody tr:hover {
+            background: #fff8e8;
+        }
+
+        .statistics-table td:nth-child(1) {
+            font-weight: 600;
+            color: #101d35;
+        }
+
+        .statistics-table td:nth-child(5),
+        .statistics-table td:nth-child(6) {
+            font-weight: bold;
+            text-align: center;
+        }
+
+        .statistics-table th:nth-child(5),
+        .statistics-table th:nth-child(6) {
+            text-align: center;
+        }
+
+        .statistics-table img {
+            width: 42px !important;
+            height: 42px !important;
+            object-fit: contain;
+            display: block;
+        }
+
+        @media (max-width: 600px) {
+
+    .statistics-page {
+        padding: 12px;
+        margin: 20px auto;
+    }
+
+    .statistics-heading {
+        padding: 25px 18px;
+    }
+
+    .statistics-heading h2 {
+        font-size: 24px;
+    }
+
+    .statistics-card {
+        padding: 15px;
+    }
+
+    .statistics-toolbar {
+        align-items: stretch;
+        flex-direction: column;
+    }
+
+    .statistics-search {
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    .download-statistics-btn {
+        width: 100%;
+    }
+
+    .summary-card {
+        padding: 18px;
+    }
+
+    .summary-card p {
+        font-size: 26px;
+    }
+
+    .statistics-table {
+        min-width: 600px;
+    }
+
+    .statistics-table th,
+    .statistics-table td {
+        padding: 12px 10px;
+        font-size: 13px;
+    }
+
+    .statistics-table img {
+        width: 32px !important;
+        height: 32px !important;
+    }
+}
+
+.download-statistics-btn {
+    background: #d6a629;
+    color: #101d35;
+    border: none;
+    padding: 12px 18px;
+    border-radius: 8px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.download-statistics-btn:hover {
+    background: #bd901c;
+}
+
+    </style>
 </head>
 
 <body>
@@ -18,40 +231,83 @@
         <p>Player Statistics</p>
     </header>
 
-    <main class="section">
+    <main class="statistics-page">
 
-        <h2>Player Statistics</h2>
+        <section class="statistics-heading">
+            <span class="statistics-label">Bong Sports Network</span>
+            <h2>Player Statistics</h2>
+            <p>Track player performances, appearances and goals across competitions and seasons.</p>
+        </section>
 
-        <p>Explore player performances across competitions and seasons.</p>
+<section class="statistics-summary">
 
-        <input
-            type="text"
-            id="searchStatistics"
-            placeholder="Search by player name"
-        >
+    <div class="summary-card">
+        <h3>Total Player Records</h3>
+        <p id="totalPlayerRecords">0</p>
+    </div>
 
-        <div class="table-wrapper">
+    <div class="summary-card">
+        <h3>Total Appearances</h3>
+        <p id="totalAppearances">0</p>
+    </div>
 
-            <table>
-                <thead>
-                    <tr>
-                        <th>Player</th>
-                        <th>Club Team</th>
-                        <th>Club Logo</th>
-                        <th>Season</th>
-                        <th>Apps</th>
-                        <th>Goals</th>
-                    </tr>
-                </thead>
+    <div class="summary-card">
+        <h3>Total Goals</h3>
+        <p id="totalGoals">0</p>
+    </div>
 
-                <tbody id="statisticsTable">
-                    <tr>
-                        <td colspan="6">Loading statistics...</td>
-                    </tr>
-                </tbody>
-            </table>
+</section>
 
-        </div>
+        <section class="statistics-card">
+
+            <div class="statistics-toolbar">
+
+    <div>
+        <h3>Performance Records</h3>
+
+        <p id="statisticsCount" style="color:#667085; font-size:13px; margin-top:5px;">
+            Loading records...
+        </p>
+    </div>
+
+    <input
+    type="text"
+    id="searchStatistics"
+    class="statistics-search"
+    placeholder="Search player or club..."
+>
+
+<button id="downloadStatistics" class="download-statistics-btn">
+    Download Statistics
+</button>
+
+</div>
+
+            <div class="statistics-table-wrapper">
+
+                <table class="statistics-table">
+
+                    <thead>
+                        <tr>
+                            <th>Player</th>
+<th>Club</th>
+<th>Season</th>
+<th>Apps</th>
+<th>Goals</th>
+                        </tr>
+                    </thead>
+
+                    <tbody id="statisticsTable">
+                        <tr>
+                            <td colspan="5">Loading statistics...</td>
+                        </tr>
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </section>
 
     </main>
 
