@@ -6,7 +6,7 @@ const liveScoresContainer = document.getElementById('liveScoresContainer');
 
 function formatMatchClock(match) {
 
-    let seconds = match.clock_seconds || 0;
+    let seconds = Number(match.clock_seconds) || 0;
 
     if (
         match.clock_status === 'running' &&
@@ -17,32 +17,45 @@ function formatMatchClock(match) {
         seconds += Math.floor((Date.now() - startedAt) / 1000);
     }
 
-    // FIRST HALF STOPPAGE TIME
-    if (seconds > 2700 && seconds <= 5400) {
-
-        const addedMinutes = Math.ceil((seconds - 2700) / 60);
-
-        return '45+' + addedMinutes + " (STOPPAGE TIME)";
-    }
-
-    // SECOND HALF STOPPAGE TIME
-    if (seconds > 5400) {
-
-        const addedMinutes = Math.ceil((seconds - 5400) / 60);
-
-        return '90+' + addedMinutes + " (STOPPAGE TIME)";
-    }
-
-    // NORMAL MATCH TIME
     const minutes = Math.floor(seconds / 60);
     const remainingSeconds = seconds % 60;
 
-    return (
-        String(minutes).padStart(2, '0') + ':' +
-        String(remainingSeconds).padStart(2, '0')
-    );
-}
+    // FIRST HALF
+    if (match.clock_period === 'First Half') {
 
+        if (minutes >= 45) {
+            const addedMinutes = Math.ceil((seconds - 2700) / 60);
+
+            return '45+' + addedMinutes;
+        }
+
+        return minutes + ':' + String(remainingSeconds).padStart(2, '0');
+    }
+
+    // HALF-TIME
+    if (match.clock_period === 'Half-Time') {
+        return 'HT';
+    }
+
+    // SECOND HALF
+    if (match.clock_period === 'Second Half') {
+
+        if (minutes >= 90) {
+            const addedMinutes = Math.ceil((seconds - 5400) / 60);
+
+            return '90+' + addedMinutes;
+        }
+
+        return minutes + ':' + String(remainingSeconds).padStart(2, '0');
+    }
+
+    // FULL-TIME
+    if (match.clock_period === 'Full-Time') {
+        return 'FT';
+    }
+
+    return '00:00';
+}
 // AUTOMATIC LIVE CLOCK UPDATE
 
 setInterval(function() {
@@ -60,14 +73,41 @@ setInterval(function() {
             seconds += Math.floor((Date.now() - startedAt) / 1000);
         }
 
-        const hours = Math.floor(seconds / 3600);
-        const minutes = Math.floor((seconds % 3600) / 60);
+        const period = clock.dataset.period;
+        const minutes = Math.floor(seconds / 60);
         const remainingSeconds = seconds % 60;
 
-        clock.textContent =
-            String(hours).padStart(2, '0') + ':' +
-            String(minutes).padStart(2, '0') + ':' +
-            String(remainingSeconds).padStart(2, '0');
+        if (period === 'First Half' && minutes >= 45) {
+
+            clock.textContent = '45+' + Math.ceil((seconds - 2700) / 60);
+
+        }
+
+        else if (period === 'Second Half' && minutes >= 90) {
+
+            clock.textContent = '90+' + Math.ceil((seconds - 5400) / 60);
+
+        }
+
+        else if (period === 'Half-Time') {
+
+            clock.textContent = 'HT';
+
+        }
+
+        else if (period === 'Full-Time') {
+
+            clock.textContent = 'FT';
+
+        }
+
+        else {
+
+            clock.textContent =
+                minutes + ':' +
+                String(remainingSeconds).padStart(2, '0');
+
+        }
 
     });
 
@@ -202,6 +242,7 @@ clock.className = 'live-match-clock';
 clock.dataset.seconds = match.clock_seconds || 0;
 clock.dataset.status = match.clock_status || '';
 clock.dataset.startedAt = match.clock_started_at || '';
+clock.dataset.period = match.clock_period || '';
 
 clock.textContent = formatMatchClock(match);
 
