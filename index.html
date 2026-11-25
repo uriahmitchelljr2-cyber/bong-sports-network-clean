@@ -6,6 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>Bong Sports Network | BSN</title>
+    <link rel="manifest" href="/manifest.json">
+<meta name="theme-color" content="#0b6623">
 
     <link rel="stylesheet" href="style.css">
 </head>
@@ -339,6 +341,24 @@ document.querySelector(".close-photo").onclick = function() {
 
 <script type="module" src="admin/home.js"></script>
 <script type="module" src="live-scores.js"></script>
+
+<script>
+    if ('serviceWorker' in navigator) {
+
+        window.addEventListener('load', function() {
+
+            navigator.serviceWorker.register('/service-worker.js')
+                .then(function(registration) {
+                    console.log('BSN Service Worker registered:', registration.scope);
+                })
+                .catch(function(error) {
+                    console.error('Service Worker registration failed:', error);
+                });
+
+        });
+
+    }
+</script>
 
 </body>
 </html>
