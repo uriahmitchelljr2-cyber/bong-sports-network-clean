@@ -63,13 +63,20 @@ totalPlayerRecords.textContent = data.length;
 totalAppearances.textContent = totalApps.toLocaleString();
 totalGoals.textContent = goalsScored.toLocaleString();
 
-    const searchText = search.trim().toLowerCase();
-    const filteredData = data.filter(function(stat) {
-        const playerName = (stat.player_name || '').toLowerCase();
-        const clubName = (stat.clubs?.club_name || '').toLowerCase();
-        return playerName.includes(searchText) ||
-               clubName.includes(searchText);
-    });
+   const searchText = search.trim().toLowerCase();
+
+const filteredData = data.filter(function(stat) {
+    const playerName = (stat.player_name || '').toLowerCase();
+    const clubName = (stat.clubs?.club_name || '').toLowerCase();
+
+    return playerName.includes(searchText) ||
+           clubName.includes(searchText);
+});
+
+// SORT GOALS FROM HIGHEST TO LOWEST
+filteredData.sort(function(a, b) {
+    return Number(b.goals || 0) - Number(a.goals || 0);
+});
 
     statisticsCount.textContent =
     filteredData.length + ' Player Records';
@@ -89,10 +96,11 @@ function displayStatistics(data) {
         return;
     }
 
-    data.forEach(function(stat) {
+    data.forEach(function(stat, index) {
 
         const row = document.createElement('tr');
-
+const rankCell = document.createElement('td');
+rankCell.textContent = index + 1;
         const playerCell = document.createElement('td');
         playerCell.textContent = stat.player_name || 'Unknown Player';
 
@@ -131,19 +139,20 @@ function displayStatistics(data) {
         goalsCell.textContent = stat.goals ?? 0;
 
         row.append(
-            playerCell,
-            clubCell,
-            seasonCell,
-            appearancesCell,
-            goalsCell
-        );
-
+    rankCell,
+    playerCell,
+    clubCell,
+    seasonCell,
+    appearancesCell,
+    goalsCell
+);
         statisticsTable.appendChild(row);
 
     });
 }
 
 // DISPLAY TOP SCORERS
+
 function displayTopScorers(data) {
 
     topScorersList.innerHTML = '';
@@ -158,7 +167,18 @@ function displayTopScorers(data) {
         return;
     }
 
+    let currentRank = 0;
+    let previousGoals = null;
+
     topScorers.forEach(function(stat, index) {
+
+        const goalsScored = Number(stat.goals);
+
+        if (goalsScored !== previousGoals) {
+            currentRank = index + 1;
+        }
+
+        previousGoals = goalsScored;
 
         const item = document.createElement('div');
         item.className = 'top-scorer-item';
@@ -167,7 +187,7 @@ function displayTopScorers(data) {
 
         const playerName = document.createElement('div');
         playerName.className = 'top-scorer-player';
-        playerName.textContent = (index + 1) + '. ' +
+        playerName.textContent = currentRank + '. ' +
             (stat.player_name || 'Unknown Player');
 
         const clubName = document.createElement('div');
@@ -177,7 +197,7 @@ function displayTopScorers(data) {
 
         const goals = document.createElement('div');
         goals.className = 'top-scorer-goals';
-        goals.textContent = stat.goals + ' Goals';
+        goals.textContent = goalsScored + ' Goals';
 
         playerInfo.append(playerName, clubName);
         item.append(playerInfo, goals);
